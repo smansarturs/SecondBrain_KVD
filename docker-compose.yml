@@ -1,0 +1,26 @@
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: jtt
+      MYSQL_DATABASE: jtt_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: jtt
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: admin
+      PMA_PASSWORD: jtt
+
+volumes:
+  db_data:
