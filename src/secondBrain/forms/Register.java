@@ -8,11 +8,9 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
 import secondBrain.services.UserService;
@@ -24,9 +22,8 @@ public class Register extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JPasswordField passwordField;
-	private JPasswordField passwordField_1;
 	private JTextField emailField;
+	private JPasswordField passwordField;
 
 	/**
 	 * Launch the application.
@@ -48,6 +45,7 @@ public class Register extends JFrame {
 	 * Create the frame.
 	 */
 	public Register() {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 360, 618);
 		contentPane = new JPanel();
@@ -66,33 +64,14 @@ public class Register extends JFrame {
 		lblNewLabel_1.setBounds(27, 133, 43, 20);
 		contentPane.add(lblNewLabel_1);
 		
-		emailField = new JTextField();
-		emailField.setBounds(27, 154, 288, 40);
-		contentPane.add(emailField);
-		emailField.setColumns(10);
-		
 		JLabel lblNewLabel_2 = new JLabel("Password");
 		lblNewLabel_2.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblNewLabel_2.setBounds(27, 217, 66, 20);
 		contentPane.add(lblNewLabel_2);
 		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(27, 241, 288, 40);
-		contentPane.add(passwordField);
-		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Label");
-		chckbxNewCheckBox.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		chckbxNewCheckBox.setBounds(27, 308, 66, 20);
-		contentPane.add(chckbxNewCheckBox);
-		
-		JLabel lblNewLabel_3 = new JLabel("Description");
-		lblNewLabel_3.setForeground(SystemColor.controlShadow);
-		lblNewLabel_3.setBounds(49, 327, 60, 14);
-		contentPane.add(lblNewLabel_3);
-		
 		JButton btnNewButton = new JButton("Register");
 		btnNewButton.setForeground(SystemColor.menuText);
-		btnNewButton.setBounds(27, 371, 288, 31);
+		btnNewButton.setBounds(27, 321, 288, 41);
 		contentPane.add(btnNewButton);
 		
 		JLabel emailErrorLabel = new JLabel("");
@@ -103,10 +82,6 @@ public class Register extends JFrame {
 		passwordErrorLabel.setBounds(27, 287, 288, 14);
 		contentPane.add(passwordErrorLabel);
 		
-		passwordField_1 = new JPasswordField();
-		passwordField_1.setBounds(27, 239, 288, 37);
-		contentPane.add(passwordField_1);
-		
 		emailField = new JTextField();
 		emailField.setBounds(27, 155, 288, 36);
 		contentPane.add(emailField);
@@ -114,13 +89,17 @@ public class Register extends JFrame {
 		
 		JLabel lblNewLabel_4 = new JLabel("Already have an account?");
 		lblNewLabel_4.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		lblNewLabel_4.setBounds(27, 426, 137, 14);
+		lblNewLabel_4.setBounds(37, 376, 137, 14);
 		contentPane.add(lblNewLabel_4);
 		
 		JButton btnNewButton_1 = new JButton("Log in!");
 		btnNewButton_1.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnNewButton_1.setBounds(164, 423, 89, 23);
+		btnNewButton_1.setBounds(174, 373, 89, 23);
 		contentPane.add(btnNewButton_1);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(27, 248, 288, 36);
+		contentPane.add(passwordField);
 		
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -162,6 +141,12 @@ public class Register extends JFrame {
 			
 		});
 		
+		 btnNewButton_1.addActionListener(new ActionListener() {
+		      public void actionPerformed(ActionEvent e) {
+		          new Login();
+		          dispose();
+		        }
+		    });
 
 	}
 }
