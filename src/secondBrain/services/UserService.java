@@ -49,7 +49,7 @@ public class UserService {
 		
 		String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
 		
-		String query = "INSERT INTO " + TABLE_NAME + " (email, password) VALUES (?, ?)";
+		String query = "INSERT INTO " + TABLE_NAME + " (email, password_hash) VALUES (?, ?)";
 		PreparedStatement stmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
 				ResultSet.CONCUR_READ_ONLY);
 		stmt.setString(1, email);
@@ -87,7 +87,7 @@ public class UserService {
 		}
 		
 		if (newPassword != null) {
-			String query = "UPDATE " + TABLE_NAME + " SET password = ? WHERE id = ?";
+			String query = "UPDATE " + TABLE_NAME + " SET password_hash = ? WHERE id = ?";
 			PreparedStatement stmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 			String encodedNewPassword = Base64.getEncoder().encodeToString(newPassword.getBytes());
@@ -142,7 +142,7 @@ public class UserService {
 		
 		rs.first();
 		String email = rs.getString("email");
-		String password = rs.getString("password");
+		String password = rs.getString("password_hash");
 		
 		User user = new User (id, email, password);
 		
@@ -172,7 +172,7 @@ public class UserService {
 		
 		rs.first();
 		String email = rs.getString("email");
-		String password = rs.getString("password");
+		String password = rs.getString("password_hash");
 		
 		User user = new User (id, email, password);
 		
@@ -198,7 +198,7 @@ public class UserService {
 		while(rs.next()) {
 			int id = rs.getInt("id");
 			String email = rs.getString("email");
-			String password = rs.getString("password");
+			String password = rs.getString("password_hash");
 			
 			User user = new User(id, email, password);
 			users.add(user);

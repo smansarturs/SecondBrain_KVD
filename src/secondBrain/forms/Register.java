@@ -143,7 +143,9 @@ public class Register extends JFrame {
 		
 		 btnNewButton_1.addActionListener(new ActionListener() {
 		      public void actionPerformed(ActionEvent e) {
-		          new Login();
+		          Login login = new Login();
+		          login.setVisible(true);
+		          login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		          dispose();
 		        }
 		    });
