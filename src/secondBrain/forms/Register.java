@@ -147,7 +147,7 @@ public class Register extends JFrame {
 					
 					boolean isInserted = service.insert(email, password);
 					
-					if (!isInserted) {
+					if (isInserted) {
 					    Login login = new Login();
 					    login.setVisible(true);
 					    login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
