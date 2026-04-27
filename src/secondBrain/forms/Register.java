@@ -147,13 +147,13 @@ public class Register extends JFrame {
 					
 					boolean isInserted = service.insert(email, password);
 					
-					if (!isInserted) {
-						Login login = new Login();
-						login.setVisible(true);
-						login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-						dispose();
+					if (isInserted) {
+					    Login login = new Login();
+					    login.setVisible(true);
+					    login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					    dispose();
 					} else {
-						System.out.println("Nav pievienots!");
+					    System.out.println("Nav pievienots!");
 					}
 				} catch (ClassNotFoundException | SQLException e1) {
 					e1.printStackTrace();
