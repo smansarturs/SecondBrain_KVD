@@ -122,7 +122,7 @@ public class Register extends JFrame {
 		btnNewButton_1.setBounds(164, 423, 89, 23);
 		contentPane.add(btnNewButton_1);
 		
-		btnNewButton_1.addActionListener(new ActionListener() {
+		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String email = emailField.getText();
 				String password = new String(passwordField.getPassword());
