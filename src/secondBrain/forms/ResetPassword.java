@@ -5,11 +5,15 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import secondBrain.services.UserService;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -88,7 +92,22 @@ public class ResetPassword extends JFrame {
 					emailErrorLabel.setText("");
 				}
 				
-				
+				try {
+					UserService service = new UserService();
+					
+					boolean isInserted = service.insert(email, email);
+					
+					if (!isInserted) {
+						Login login = new Login();
+						login.setVisible(true);
+						login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						dispose();
+					} else {
+						System.out.println("Nav pievienots!");
+					}
+				} catch (ClassNotFoundException | SQLException e1) {
+					e1.printStackTrace();
+				}
 				
 			}
 			

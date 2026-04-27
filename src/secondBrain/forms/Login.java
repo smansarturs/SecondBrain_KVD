@@ -94,6 +94,13 @@ public class Login extends JFrame {
 		btnNewButton_1.setBounds(25, 411, 130, 23);
 		contentPane.add(btnNewButton_1);
 		
+		btnNewButton_1.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        ResetPassword resetPasswordFrame = new ResetPassword();
+		        resetPasswordFrame.setVisible(true);
+		    }
+		});
+		
 		JLabel lblNewLabel_3 = new JLabel("Forgot password?");
 		lblNewLabel_3.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblNewLabel_3.setBounds(38, 396, 103, 14);
