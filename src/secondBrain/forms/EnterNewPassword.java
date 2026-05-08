@@ -5,9 +5,16 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import secondBrain.services.UserService;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 
@@ -81,6 +88,52 @@ public class EnterNewPassword extends JFrame {
 		JButton btnNewButton = new JButton("Reset password");
 		btnNewButton.setBounds(70, 375, 175, 37);
 		contentPane.add(btnNewButton);
+		
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String password = new String(passwordField.getPassword());
+				String confirmPassword = new String(confirmPasswordField.getPassword());
+				
+				if (password.equals("")) {
+					lblNewLabel_2.setText("Password is required!");
+					return;
+				} else {
+					lblNewLabel_2.setText("");
+				}
+				
+				if (confirmPassword.equals("")) {
+					confirmPasswordErrorLabel.setText("Confirm password is required!");
+					return;
+				} else {
+					confirmPasswordErrorLabel.setText("");
+				}
+				
+				if (!password.equals(confirmPassword)) {
+					confirmPasswordErrorLabel.setText("Passwords do not match!");
+					return;
+				} else {
+					confirmPasswordErrorLabel.setText("");
+				}
+				
+				try {
+					UserService service = new UserService();
+					
+					boolean isUpdated = service.updatePassword(password);
+					
+					if (isUpdated) {
+						Login login = new Login();
+						login.setVisible(true);
+						login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						dispose();
+					} else {
+						confirmPasswordErrorLabel.setText("Failed to update password!");
+					}
+				} catch (ClassNotFoundException | SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 
 	}
 
