@@ -112,5 +112,14 @@ public class ResetPassword extends JFrame {
 			}
 			
 		});
+		
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Login login = new Login();
+				login.setVisible(true);
+				login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				dispose();
+			}
+		});
 	}
 }
