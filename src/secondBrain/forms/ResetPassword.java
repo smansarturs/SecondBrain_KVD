@@ -98,9 +98,9 @@ public class ResetPassword extends JFrame {
 					boolean isInserted = service.insert(email, email);
 					
 					if (!isInserted) {
-						Login login = new Login();
-						login.setVisible(true);
-						login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						EnterNewPassword enterNewPassword = new EnterNewPassword();
+						enterNewPassword.setVisible(true);
+						enterNewPassword.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 						dispose();
 					} else {
 						System.out.println("Nav pievienots!");
