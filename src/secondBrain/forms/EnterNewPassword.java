@@ -96,12 +96,12 @@ public class EnterNewPassword extends JFrame {
 				String password = new String(passwordField.getPassword());
 				String confirmPassword = new String(confirmPasswordField.getPassword());
 				
-<<<<<<< HEAD
+
 				if (password.equals("")) {
-					lblNewLabel_2.setText("Password is required!");
+					passwordErrorLabel.setText("Password is required!");
 					return;
 				} else {
-					lblNewLabel_2.setText("");
+					passwordErrorLabel.setText("");
 				}
 				
 				if (confirmPassword.equals("")) {
@@ -135,7 +135,7 @@ public class EnterNewPassword extends JFrame {
 					e1.printStackTrace();
 				}
 				
-=======
+
 				// Validate password is not empty
 				if (password.equals("")) {
 					passwordErrorLabel.setText("Password is required!");
@@ -177,7 +177,7 @@ public class EnterNewPassword extends JFrame {
 					e1.printStackTrace();
 					confirmPasswordErrorLabel.setText("Error: " + e1.getMessage());
 				}
->>>>>>> branch 'main' of git@github-jtt-1p:smansarturs/SecondBrain_KVD.git
+
 			}
 		});
 
