@@ -103,6 +103,96 @@ public class UserService {
 		}
 	}
 	
+	/**
+	 * Updates the password for a user identified by email during password reset.
+	 * This method searches for the most recently added user with the given email
+	 * and updates their password. This is used in the password reset flow.
+	 * @param email			the email of the user whose password needs to be updated.
+	 * @param newPassword	the new password to set.
+	 * @return boolean {@code TRUE} if the password has been successfully updated, {@code FALSE} otherwise.
+	 * @throws SQLException
+	 */
+	public boolean updatePasswordByEmail(String email, String newPassword) throws SQLException {
+		if (email == null || newPassword == null) {
+			return false;
+		}
+		
+		Connection conn = this.db.getConn();
+		
+		// First, find the user with the given email
+		String selectQuery = "SELECT id FROM " + TABLE_NAME + " WHERE email = ? ORDER BY id DESC LIMIT 1";
+		PreparedStatement selectStmt = conn.prepareStatement(selectQuery, ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);
+		selectStmt.setString(1, email);
+		ResultSet rs = selectStmt.executeQuery();
+		
+		if (!rs.next()) {
+			return false; // User not found
+		}
+		
+		int userId = rs.getInt("id");
+		
+		// Update the password for this user
+		String encodedNewPassword = Base64.getEncoder().encodeToString(newPassword.getBytes());
+		String updateQuery = "UPDATE " + TABLE_NAME + " SET password_hash = ? WHERE id = ?";
+		PreparedStatement updateStmt = conn.prepareStatement(updateQuery, ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);
+		updateStmt.setString(1, encodedNewPassword);
+		updateStmt.setInt(2, userId);
+		
+		int rows = updateStmt.executeUpdate();
+		
+		if (rows > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Updates the password for the current user. This is a simplified version 
+	 * that updates the most recently added user's password. Use updatePasswordByEmail() 
+	 * for more specific password reset scenarios.
+	 * @param newPassword	the new password to set.
+	 * @return boolean {@code TRUE} if the password has been successfully updated, {@code FALSE} otherwise.
+	 * @throws SQLException
+	 */
+	public boolean updatePassword(String newPassword) throws SQLException {
+		if (newPassword == null) {
+			return false;
+		}
+		
+		Connection conn = this.db.getConn();
+		
+		// Get the most recently added user
+		String selectQuery = "SELECT id FROM " + TABLE_NAME + " ORDER BY id DESC LIMIT 1";
+		PreparedStatement selectStmt = conn.prepareStatement(selectQuery, ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = selectStmt.executeQuery();
+		
+		if (!rs.next()) {
+			return false; // No user found
+		}
+		
+		int userId = rs.getInt("id");
+		
+		// Update the password for this user
+		String encodedNewPassword = Base64.getEncoder().encodeToString(newPassword.getBytes());
+		String updateQuery = "UPDATE " + TABLE_NAME + " SET password_hash = ? WHERE id = ?";
+		PreparedStatement updateStmt = conn.prepareStatement(updateQuery, ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);
+		updateStmt.setString(1, encodedNewPassword);
+		updateStmt.setInt(2, userId);
+		
+		int rows = updateStmt.executeUpdate();
+		
+		if (rows > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public boolean delete(int id) throws SQLException {
 		if (id <= 0) {
 			return false;
