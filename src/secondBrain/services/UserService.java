@@ -142,9 +142,10 @@ public class UserService {
 		
 		rs.first();
 		String email = rs.getString("email");
-		String password = rs.getString("password_hash");
+		String encodedPassword = rs.getString("password_hash");
+		String decodedPassword = new String(Base64.getDecoder().decode(encodedPassword));
 		
-		User user = new User (id, email, password);
+		User user = new User (id, email, decodedPassword);
 		
 		return id;
 		
@@ -172,9 +173,10 @@ public class UserService {
 		
 		rs.first();
 		String email = rs.getString("email");
-		String password = rs.getString("password_hash");
+		String encodedPassword = rs.getString("password_hash");
+		String decodedPassword = new String(Base64.getDecoder().decode(encodedPassword));
 		
-		User user = new User (id, email, password);
+		User user = new User (id, email, decodedPassword);
 		
 		return user;
 	}
@@ -198,9 +200,10 @@ public class UserService {
 		while(rs.next()) {
 			int id = rs.getInt("id");
 			String email = rs.getString("email");
-			String password = rs.getString("password_hash");
+			String encodedPassword = rs.getString("password_hash");
+			String decodedPassword = new String(Base64.getDecoder().decode(encodedPassword));
 			
-			User user = new User(id, email, password);
+			User user = new User(id, email, decodedPassword);
 			users.add(user);
 		}
 		
