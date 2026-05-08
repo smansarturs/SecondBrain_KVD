@@ -140,7 +140,6 @@ public class UserService {
 			return -1;
 		}
 		
-		rs.first();
 		String email = rs.getString("email");
 		String encodedPassword = rs.getString("password_hash");
 		String decodedPassword = new String(Base64.getDecoder().decode(encodedPassword));
@@ -154,7 +153,7 @@ public class UserService {
 	/**
 	 * Selects a user from database table users by field ID
 	 * @param id			users email
-	 * @return user if at least 1 entry is found returns the user, but if no entry is found returns 0.
+	 * @return user if at least 1 entry is found returns the user, but if no entry is found returns null.
 	 * @throws SQLException
 	 */
 	public User selectUserByID (int id) throws SQLException {
@@ -167,11 +166,10 @@ public class UserService {
 		stmt.setInt(1, id);
 		ResultSet rs = stmt.executeQuery();
 		
-		if(rs == null) {
+		if(!rs.next()) {
 			return null;
 		}
 		
-		rs.first();
 		String email = rs.getString("email");
 		String encodedPassword = rs.getString("password_hash");
 		String decodedPassword = new String(Base64.getDecoder().decode(encodedPassword));
