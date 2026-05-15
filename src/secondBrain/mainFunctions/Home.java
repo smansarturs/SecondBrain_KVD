@@ -45,7 +45,7 @@ public class Home extends JFrame {
 		JLabel lblNewLabel = new JLabel("Home");
 		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 30));
 		lblNewLabel.setForeground(SystemColor.textHighlight);
-		lblNewLabel.setBounds(49, 32, 94, 34);
+		lblNewLabel.setBounds(27, 29, 130, 34);
 		contentPane.add(lblNewLabel);
 		
 		JButton btnNewButton = new JButton("Onboarding");
