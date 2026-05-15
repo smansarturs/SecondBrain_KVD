@@ -15,6 +15,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import secondBrain.mainFunctions.Home;
 import secondBrain.services.UserService;
 
 public class Login extends JFrame {
@@ -108,45 +109,39 @@ public class Login extends JFrame {
 		contentPane.add(lblNewLabel_3);
 		
 		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String email = emailField.getText();
-				String password = new String(passwordField.getPassword());
+		    public void actionPerformed(ActionEvent e) {
+		        String email = emailField.getText();
+		        String password = new String(passwordField.getPassword());
 
+		        // Simple validation
+		        if (email.isEmpty()) {
+		            emailErrorLabel.setText("Email is required!");
+		            return;
+		        }
+		        if (password.isEmpty()) {
+		            passwordErrorLabel.setText("Password is required!");
+		            return;
+		        }
 
-				if (email.equals("")) {
-					emailErrorLabel.setText("Email is required!");
-					return;
-				} else {
-					emailErrorLabel.setText("");
-				}
-				
-				if (password.equals("")) {
-					passwordErrorLabel.setText("Password is required!");
-					return;
-				} else {
-					passwordErrorLabel.setText("");
-				}
-				
-				try {
-					UserService service = new UserService();
-					
-					boolean isInserted = service.insert(email, password);
-					
-					if (!isInserted) {
-						Login login = new Login();
-						login.setVisible(true);
-						login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-						dispose();
-					} else {
-						System.out.println("Nav pievienots!");
-					}
-				} catch (ClassNotFoundException | SQLException e1) {
-					e1.printStackTrace();
-				}
-			}
-			
+		        try {
+		            UserService service = new UserService();
+		            
+		            boolean isValidUser = service.login(email, password);
+		            
+		            if (isValidUser) {
+		                Home home = new Home();
+		                home.setVisible(true);
+		                dispose(); 
+		            } else {
+		                passwordErrorLabel.setText("Invalid email or password!");
+		            }
+		            
+		        } catch (ClassNotFoundException | SQLException e1) {
+		            e1.printStackTrace();
+		            passwordErrorLabel.setText("Database error occurred.");
+		        }
+		    }
 		});
-		
 		
 	}
 

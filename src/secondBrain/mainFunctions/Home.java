@@ -8,8 +8,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.SystemColor;
 import java.awt.Font;
-import javax.swing.JMenuItem;
-import javax.swing.JMenu;
 import javax.swing.JButton;
 
 public class Home extends JFrame {

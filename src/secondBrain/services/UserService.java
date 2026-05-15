@@ -298,4 +298,33 @@ public class UserService {
 		return users;
 		
 	}
+	
+	/**
+	 * Validates user credentials for login.
+	 * @param email The user's email.
+	 * @param password The raw password input.
+	 * @return true if credentials match, false otherwise.
+	 */
+	public boolean login(String email, String password) throws SQLException {
+	    if (email == null || password == null) {
+	        return false;
+	    }
+
+	    Connection conn = this.db.getConn();
+	    String query = "SELECT password_hash FROM " + TABLE_NAME + " WHERE email = ?";
+	    
+	    PreparedStatement stmt = conn.prepareStatement(query);
+	    stmt.setString(1, email);
+	    ResultSet rs = stmt.executeQuery();
+
+	    if (rs.next()) {
+	        String storedEncodedPassword = rs.getString("password_hash");
+	        // Decode the password from the database to compare with user input
+	        String decodedPassword = new String(Base64.getDecoder().decode(storedEncodedPassword));
+	        
+	        return decodedPassword.equals(password);
+	    }
+
+	    return false; // User not found
+	}
 }
