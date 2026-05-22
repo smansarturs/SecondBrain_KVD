@@ -448,11 +448,9 @@ public class ConnectionEditor extends JFrame {
             drawCurve(g2, src.x, src.y, dest.x, dest.y, new Color(0, 200, 100), 1.5f, true);
         }
 
-        private void drawCurve(Graphics2D g2, int x1, int y1, int x2, int y2,
-                                Color color, float stroke, boolean dashed) {
+        private void drawCurve(Graphics2D g2, int x1, int y1, int x2, int y2, Color color, float stroke, boolean dashed) {
             double ctrl = Math.abs(x2 - x1) / 2.0;
-            CubicCurve2D curve = new CubicCurve2D.Double(
-                x1, y1, x1 + ctrl, y1, x2 - ctrl, y2, x2, y2);
+            CubicCurve2D curve = new CubicCurve2D.Double (x1, y1, x1 + ctrl, y1, x2 - ctrl, y2, x2, y2);
             g2.setStroke(dashed
                 ? new BasicStroke(stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10, new float[]{6,4}, 0)
                 : new BasicStroke(stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
