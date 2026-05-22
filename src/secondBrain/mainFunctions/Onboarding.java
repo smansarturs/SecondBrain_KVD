@@ -60,19 +60,19 @@ public class Onboarding extends JFrame {
 		this.projectId = projectId;
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 500, 400);
+		setBounds(100, 100, 500, 459);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel titleLabel = new JLabel("Create Your First Node");
+		JLabel titleLabel = new JLabel("Onboarding");
 		titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		titleLabel.setForeground(SystemColor.textHighlight);
 		titleLabel.setBounds(27, 11, 250, 30);
 		contentPane.add(titleLabel);
 
-		JLabel subtitleLabel = new JLabel("Welcome to SecondBrain! Create your first note:");
+		JLabel subtitleLabel = new JLabel("Create your note:");
 		subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		subtitleLabel.setBounds(27, 45, 400, 15);
 		contentPane.add(subtitleLabel);
@@ -93,8 +93,8 @@ public class Onboarding extends JFrame {
 		contentPane.add(contentLabel);
 
 		contentArea = new JTextArea();
-		contentArea.setLineWrap(true);
 		contentArea.setWrapStyleWord(true);
+		contentArea.setLineWrap(true);
 		contentArea.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		JScrollPane scrollPane = new JScrollPane(contentArea);
 		scrollPane.setBounds(27, 145, 430, 120);
@@ -114,6 +114,11 @@ public class Onboarding extends JFrame {
 		skipButton.setBounds(247, 300, 210, 40);
 		skipButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		contentPane.add(skipButton);
+		
+		JButton btnBackhome = new JButton("Back to home");
+		btnBackhome.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnBackhome.setBounds(132, 351, 210, 40);
+		contentPane.add(btnBackhome);
 
 		createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
