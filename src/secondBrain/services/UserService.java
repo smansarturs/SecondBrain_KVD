@@ -269,6 +269,38 @@ public class UserService {
 		return user;
 	}
 	
+	/**
+	 * Selects a user from database table users by email
+	 * @param email			the user's email
+	 * @return user if found, null otherwise
+	 * @throws SQLException
+	 */
+	public User selectUserByEmail(String email) throws SQLException {
+		if (email == null || email.isEmpty()) {
+			return null;
+		}
+		
+		Connection conn = this.db.getConn();
+		
+		String query = "SELECT * FROM " + TABLE_NAME + " WHERE email = ?";
+		
+		PreparedStatement stmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);
+		stmt.setString(1, email);
+		ResultSet rs = stmt.executeQuery();
+		
+		if (!rs.next()) {
+			return null;
+		}
+		
+		int id = rs.getInt("id");
+		String encodedPassword = rs.getString("password_hash");
+		String decodedPassword = new String(Base64.getDecoder().decode(encodedPassword));
+		
+		User user = new User(id, email, decodedPassword);
+		
+		return user;
+	}
 	
 	/**
 	 * Selects all users from table users.

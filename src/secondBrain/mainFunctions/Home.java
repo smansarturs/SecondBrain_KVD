@@ -1,6 +1,8 @@
 package secondBrain.mainFunctions;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,6 +16,7 @@ public class Home extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private int userId;
 
 	/**
 	 * Launch the application.
@@ -22,7 +25,7 @@ public class Home extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Home frame = new Home();
+					Home frame = new Home(1);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -32,9 +35,18 @@ public class Home extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the frame with default userId
 	 */
 	public Home() {
+		this(0);
+	}
+
+	/**
+	 * Create the frame with userId
+	 */
+	public Home(int userId) {
+		this.userId = userId;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 379, 612);
 		contentPane = new JPanel();
@@ -51,6 +63,11 @@ public class Home extends JFrame {
 		JButton btnNewButton = new JButton("Onboarding");
 		btnNewButton.setBounds(27, 138, 311, 34);
 		contentPane.add(btnNewButton);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openOnboarding();
+			}
+		});
 		
 		JButton btnNewButton_1 = new JButton("Connection editor");
 		btnNewButton_1.setBounds(27, 183, 311, 34);
@@ -82,5 +99,38 @@ public class Home extends JFrame {
 		btnNewButton_6.setBounds(27, 408, 311, 34);
 		contentPane.add(btnNewButton_6);
 
+	}
+
+	/**
+	 * Opens the Onboarding window with current userId
+	 */
+	private void openOnboarding() {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					System.out.println("Debug: Opening Onboarding with userId=" + userId);
+					Onboarding onboardingFrame = new Onboarding(userId, 0);
+					onboardingFrame.setVisible(true);
+				} catch (Exception e) {
+					System.err.println("Error opening Onboarding: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Get the current userId
+	 */
+	public int getUserId() {
+		return userId;
+	}
+
+	/**
+	 * Set the userId (useful when called from Login form)
+	 */
+	public void setUserId(int userId) {
+		this.userId = userId;
+		System.out.println("Debug: UserId set to " + userId);
 	}
 }

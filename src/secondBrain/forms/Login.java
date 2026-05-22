@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 import secondBrain.mainFunctions.Home;
 import secondBrain.services.UserService;
+import secondBrain.service.User;
 
 public class Login extends JFrame {
 
@@ -110,7 +111,7 @@ public class Login extends JFrame {
 		
 		btnNewButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        String email = emailField.getText();
+		        String email = emailField.getText().trim();
 		        String password = new String(passwordField.getPassword());
 
 		        // Simple validation
@@ -129,9 +130,20 @@ public class Login extends JFrame {
 		            boolean isValidUser = service.login(email, password);
 		            
 		            if (isValidUser) {
-		                Home home = new Home();
-		                home.setVisible(true);
-		                dispose(); 
+		            	User user = service.selectUserByEmail(email);
+		            	
+		            	if (user != null) {
+		            		int userId = user.getId();
+		            		System.out.println("Debug: User logged in with ID: " + userId);
+		            		
+		            		// Open Home with userId
+		            		Home home = new Home(userId);
+		            		home.setVisible(true);
+		            		home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		            		dispose();
+		            	} else {
+		            		passwordErrorLabel.setText("User not found in database!");
+		            	}
 		            } else {
 		                passwordErrorLabel.setText("Invalid email or password!");
 		            }
