@@ -51,7 +51,7 @@ public class Onboarding extends JFrame {
 		this.projectId = projectId;
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 500, 459);
+		setBounds(100, 100, 500, 403);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -100,15 +100,10 @@ public class Onboarding extends JFrame {
 		createButton.setBounds(27, 300, 210, 40);
 		createButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		contentPane.add(createButton);
-
-		JButton skipButton = new JButton("Skip");
-		skipButton.setBounds(247, 300, 210, 40);
-		skipButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		contentPane.add(skipButton);
 		
 		JButton btnBackhome = new JButton("Back to home");
 		btnBackhome.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnBackhome.setBounds(132, 351, 210, 40);
+		btnBackhome.setBounds(247, 301, 210, 40);
 		contentPane.add(btnBackhome);
 		
 		btnBackhome.addActionListener(new ActionListener() {
@@ -120,12 +115,6 @@ public class Onboarding extends JFrame {
 		createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createNode();
-			}
-		});
-
-		skipButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
 			}
 		});
 	}
@@ -223,5 +212,8 @@ public class Onboarding extends JFrame {
 		}
 	}
 	
+	private void backToHome() {
+		dispose();
+	}
 	
 }
