@@ -1,8 +1,8 @@
 package secondBrain.mainFunctions;
 
 import secondBrain.database.Database;
+import secondBrain.service.Project;
 import secondBrain.services.ProjectService;
-import secondBrain.services.ProjectService.Project;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -280,9 +280,15 @@ public class ConnectionEditor extends JFrame {
         return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3;
     }
 
-    private Point outputPort(NodeModel n) { return new Point(n.x + NodeModel.W, n.y + NodeModel.H / 2); }
-    private Point inputPort(NodeModel n)  { return new Point(n.x,               n.y + NodeModel.H / 2); }
-
+    private Point outputPort(NodeModel n) { 
+    	return new Point(n.x + NodeModel.W, n.y + NodeModel.H / 2); 
+    	
+    }
+    private Point inputPort(NodeModel n)  { 
+    	return new Point(n.x,               n.y + NodeModel.H / 2);
+    	
+    }
+    
     private boolean nearOutputPort(int mx, int my, NodeModel n) {
         Point p = outputPort(n);
         return Math.hypot(mx - p.x, my - p.y) <= 10;
@@ -344,6 +350,7 @@ public class ConnectionEditor extends JFrame {
                         setStatus("Moved \u201c" + draggedNode.title + "\u201d");
                         draggedNode = null;
                     }
+                    
                     if (connectingFrom != null) {
                         NodeModel target = nodeAt(mx, my);
                         if (target != null && target != connectingFrom) finishConnection(connectingFrom, target);
@@ -364,6 +371,7 @@ public class ConnectionEditor extends JFrame {
                         setCursor(Cursor.getDefaultCursor());
                 }
             };
+            
             addMouseListener(ma);
             addMouseMotionListener(ma);
         }
@@ -410,9 +418,7 @@ public class ConnectionEditor extends JFrame {
             g2.setColor(Color.WHITE);
             FontMetrics fm = g2.getFontMetrics();
             String label = n.title.length() > 16 ? n.title.substring(0, 14) + "\u2026" : n.title;
-            g2.drawString(label,
-                n.x + (NodeModel.W - fm.stringWidth(label)) / 2,
-                n.y + (NodeModel.H + fm.getAscent() - fm.getDescent()) / 2);
+            g2.drawString(label, n.x + (NodeModel.W - fm.stringWidth(label)) / 2, n.y + (NodeModel.H + fm.getAscent() - fm.getDescent()) / 2);
 
             drawPort(g2, outputPort(n), hov);
             drawPort(g2, inputPort(n),  false);

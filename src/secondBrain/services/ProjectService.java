@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import secondBrain.database.Database;
+import secondBrain.service.Project;
 
 public class ProjectService {
 	private Database db;
@@ -247,7 +248,6 @@ public class ProjectService {
 			return -1;
 		}
 
-		// Try to get the first project for this user
 		List<Project> userProjects = selectProjectsByUserId(userId);
 
 		if (!userProjects.isEmpty()) {
@@ -256,7 +256,6 @@ public class ProjectService {
 			return projectId;
 		}
 
-		// No projects exist, create a default one
 		System.out.println("No projects found for userId " + userId + ". Creating default project...");
 		int newProjectId = insert(userId, "My First Project");
 
@@ -272,39 +271,5 @@ public class ProjectService {
 	/**
 	 * Inner class to represent a Project
 	 */
-	public static class Project {
-		private int id;
-		private int userId;
-		private String name;
-		private long createdAt;
 
-		public Project(int id, int userId, String name, long createdAt) {
-			this.id = id;
-			this.userId = userId;
-			this.name = name;
-			this.createdAt = createdAt;
-		}
-
-		// Getters
-		public int getId() {
-			return id;
-		}
-
-		public int getUserId() {
-			return userId;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public long getCreatedAt() {
-			return createdAt;
-		}
-
-		@Override
-		public String toString() {
-			return "Project [id=" + id + ", userId=" + userId + ", name=" + name + ", createdAt=" + createdAt + "]";
-		}
-	}
 }

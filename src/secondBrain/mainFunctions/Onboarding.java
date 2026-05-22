@@ -29,9 +29,6 @@ public class Onboarding extends JFrame {
 	private int userId;
 	private int projectId;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -45,16 +42,10 @@ public class Onboarding extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame with default parameters
-	 */
 	public Onboarding() {
 		this(0, 0);
 	}
 
-	/**
-	 * Create the frame with user and project IDs
-	 */
 	public Onboarding(int userId, int projectId) {
 		this.userId = userId;
 		this.projectId = projectId;
@@ -133,14 +124,10 @@ public class Onboarding extends JFrame {
 		});
 	}
 
-	/**
-	 * Creates a node in the database
-	 */
 	private void createNode() {
 		String title = titleField.getText().trim();
 		String content = contentArea.getText().trim();
 
-		// Validation
 		if (title.isEmpty()) {
 			errorLabel.setText("Title cannot be empty!");
 			errorLabel.setForeground(new java.awt.Color(255, 0, 0));

@@ -25,9 +25,6 @@ public class Register extends JFrame {
 	private JTextField emailField;
 	private JPasswordField passwordField;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -41,9 +38,6 @@ public class Register extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public Register() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

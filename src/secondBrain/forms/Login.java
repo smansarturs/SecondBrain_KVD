@@ -26,9 +26,6 @@ public class Login extends JFrame {
 	private JTextField emailField;
 	private JPasswordField passwordField;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -42,9 +39,6 @@ public class Login extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public Login() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -114,7 +108,6 @@ public class Login extends JFrame {
 		        String email = emailField.getText().trim();
 		        String password = new String(passwordField.getPassword());
 
-		        // Simple validation
 		        if (email.isEmpty()) {
 		            emailErrorLabel.setText("Email is required!");
 		            return;
@@ -136,7 +129,6 @@ public class Login extends JFrame {
 		            		int userId = user.getId();
 		            		System.out.println("Debug: User logged in with ID: " + userId);
 		            		
-		            		// Open Home with userId
 		            		Home home = new Home(userId);
 		            		home.setVisible(true);
 		            		home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

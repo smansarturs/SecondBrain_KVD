@@ -18,9 +18,6 @@ public class Home extends JFrame {
 	private JPanel contentPane;
 	private int userId;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -34,16 +31,10 @@ public class Home extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame with default userId
-	 */
 	public Home() {
 		this(0);
 	}
 
-	/**
-	 * Create the frame with userId
-	 */
 	public Home(int userId) {
 		this.userId = userId;
 		
@@ -72,6 +63,11 @@ public class Home extends JFrame {
 		JButton btnNewButton_1 = new JButton("Connection editor");
 		btnNewButton_1.setBounds(27, 183, 311, 34);
 		contentPane.add(btnNewButton_1);
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openConnectioneditor();
+			}
+		});
 		
 		JButton btnNewButton_2 = new JButton("Focus mode");
 		btnNewButton_2.setBounds(27, 228, 311, 34);
@@ -101,14 +97,12 @@ public class Home extends JFrame {
 
 	}
 
-	/**
-	 * Opens the Onboarding window with current userId
-	 */
+
 	private void openOnboarding() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					System.out.println("Debug: Opening Onboarding with userId=" + userId);
+					System.out.println("Debug: Opening Onboarding with userId = " + userId);
 					Onboarding onboardingFrame = new Onboarding(userId, 0);
 					onboardingFrame.setVisible(true);
 				} catch (Exception e) {
@@ -120,18 +114,27 @@ public class Home extends JFrame {
 		
 	}
 	
-	
+	private void openConnectioneditor() {
+		EventQueue.invokeLater(new Runnable () {
+			public void run () {
+				try {
+					System.out.println("Debug: Opening Connection editor with userId = " + userId);
+					ConnectionEditor conneditorFrame = new ConnectionEditor(userId, 0);
+					conneditorFrame.setVisible(true);
+				} catch (Exception e) {
+					System.err.println("Error opening Onboarding: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		});
+		
+	}
 
-	/**
-	 * Get the current userId
-	 */
 	public int getUserId() {
 		return userId;
 	}
 
-	/**
-	 * Set the userId (useful when called from Login form)
-	 */
+
 	public void setUserId(int userId) {
 		this.userId = userId;
 		System.out.println("Debug: UserId set to " + userId);
