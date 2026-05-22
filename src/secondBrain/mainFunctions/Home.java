@@ -88,7 +88,7 @@ public class Home extends JFrame {
 		JLabel lblNewLabel_1 = new JLabel("What do you want to do?");
 		lblNewLabel_1.setForeground(SystemColor.textHighlight);
 		lblNewLabel_1.setFont(new Font("Segoe UI", Font.PLAIN, 28));
-		lblNewLabel_1.setBounds(27, 89, 326, 27);
+		lblNewLabel_1.setBounds(27, 93, 326, 34);
 		contentPane.add(lblNewLabel_1);
 		
 		JButton btnNewButton_5 = new JButton("Add node modal");
@@ -117,7 +117,9 @@ public class Home extends JFrame {
 				}
 			}
 		});
+		
 	}
+	
 
 	/**
 	 * Get the current userId
@@ -133,4 +135,5 @@ public class Home extends JFrame {
 		this.userId = userId;
 		System.out.println("Debug: UserId set to " + userId);
 	}
+	
 }
