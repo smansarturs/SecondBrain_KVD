@@ -223,8 +223,5 @@ public class Onboarding extends JFrame {
 		}
 	}
 	
-	private void backToHome() {
-		
-		
-	}
+	
 }
