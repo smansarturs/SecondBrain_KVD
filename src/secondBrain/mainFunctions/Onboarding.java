@@ -5,11 +5,14 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -50,7 +53,7 @@ public class Onboarding extends JFrame {
 		this.userId = userId;
 		this.projectId = projectId;
 
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 500, 403);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -115,6 +118,13 @@ public class Onboarding extends JFrame {
 		createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createNode();
+			}
+		});
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				handleWindowClose();
 			}
 		});
 	}
@@ -214,6 +224,32 @@ public class Onboarding extends JFrame {
 	
 	private void backToHome() {
 		dispose();
+	}
+	
+	private void handleWindowClose() {
+		String title = titleField.getText().trim();
+		String content = contentArea.getText().trim();
+		
+		if (!title.isEmpty() || !content.isEmpty()) {
+			int result = JOptionPane.showOptionDialog(
+				this,
+				"Do you want to save node?",
+				"Unsaved Changes",
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				new String[]{"Save", "Don't save"},
+				"Save"
+			);
+			
+			if (result == JOptionPane.YES_OPTION) {
+				createNode();
+			} else if (result == JOptionPane.NO_OPTION) {
+				dispose();
+			}
+		} else {
+			dispose();
+		}
 	}
 	
 }

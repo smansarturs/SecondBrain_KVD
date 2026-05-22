@@ -60,7 +60,7 @@ public class ConnectionEditor extends JFrame {
 
         setTitle("SecondBrain – Connection Editor");
         setSize(1000, 680);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
@@ -69,9 +69,33 @@ public class ConnectionEditor extends JFrame {
         add(canvas, BorderLayout.CENTER);
         buildBottomBar();
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                handleClosing();
+            }
+        });
+
         loadProjects();
     }
 
+    private void handleClosing() {
+        int result = JOptionPane.showConfirmDialog(
+            this,
+            "Do you want to save connection?",
+            "Exit Connection Editor",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null
+        );
+
+        if (result == JOptionPane.YES_OPTION) {
+            setStatus("Changes saved.");
+            dispose();
+        } else if (result == JOptionPane.NO_OPTION) {
+            dispose();
+        }
+    }
 
     private void buildTopBar() {
         JPanel top = new JPanel(null);
