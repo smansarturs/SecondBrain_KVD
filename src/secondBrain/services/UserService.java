@@ -119,7 +119,6 @@ public class UserService {
 		
 		Connection conn = this.db.getConn();
 		
-		// First, find the user with the given email
 		String selectQuery = "SELECT id FROM " + TABLE_NAME + " WHERE email = ? ORDER BY id DESC LIMIT 1";
 		PreparedStatement selectStmt = conn.prepareStatement(selectQuery, ResultSet.TYPE_SCROLL_INSENSITIVE,
 				ResultSet.CONCUR_READ_ONLY);
@@ -132,7 +131,6 @@ public class UserService {
 		
 		int userId = rs.getInt("id");
 		
-		// Update the password for this user
 		String encodedNewPassword = Base64.getEncoder().encodeToString(newPassword.getBytes());
 		String updateQuery = "UPDATE " + TABLE_NAME + " SET password_hash = ? WHERE id = ?";
 		PreparedStatement updateStmt = conn.prepareStatement(updateQuery, ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -164,19 +162,17 @@ public class UserService {
 		
 		Connection conn = this.db.getConn();
 		
-		// Get the most recently added user
 		String selectQuery = "SELECT id FROM " + TABLE_NAME + " ORDER BY id DESC LIMIT 1";
 		PreparedStatement selectStmt = conn.prepareStatement(selectQuery, ResultSet.TYPE_SCROLL_INSENSITIVE,
 				ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = selectStmt.executeQuery();
 		
 		if (!rs.next()) {
-			return false; // No user found
+			return false;
 		}
 		
 		int userId = rs.getInt("id");
 		
-		// Update the password for this user
 		String encodedNewPassword = Base64.getEncoder().encodeToString(newPassword.getBytes());
 		String updateQuery = "UPDATE " + TABLE_NAME + " SET password_hash = ? WHERE id = ?";
 		PreparedStatement updateStmt = conn.prepareStatement(updateQuery, ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -351,12 +347,11 @@ public class UserService {
 
 	    if (rs.next()) {
 	        String storedEncodedPassword = rs.getString("password_hash");
-	        // Decode the password from the database to compare with user input
 	        String decodedPassword = new String(Base64.getDecoder().decode(storedEncodedPassword));
 	        
 	        return decodedPassword.equals(password);
 	    }
 
-	    return false; // User not found
+	    return false;
 	}
 }

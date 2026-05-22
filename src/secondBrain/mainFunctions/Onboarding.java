@@ -66,38 +66,32 @@ public class Onboarding extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		// Title Label
 		JLabel titleLabel = new JLabel("Create Your First Node");
 		titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		titleLabel.setForeground(SystemColor.textHighlight);
 		titleLabel.setBounds(27, 11, 250, 30);
 		contentPane.add(titleLabel);
 
-		// Subtitle Label
 		JLabel subtitleLabel = new JLabel("Welcome to SecondBrain! Create your first note:");
 		subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		subtitleLabel.setBounds(27, 45, 400, 15);
 		contentPane.add(subtitleLabel);
 
-		// Title Field Label
 		JLabel fieldTitleLabel = new JLabel("Node Title:");
 		fieldTitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		fieldTitleLabel.setBounds(27, 70, 100, 20);
 		contentPane.add(fieldTitleLabel);
 
-		// Title Input Field
 		titleField = new JTextField();
 		titleField.setBounds(27, 90, 430, 30);
 		contentPane.add(titleField);
 		titleField.setColumns(10);
 
-		// Content Label
 		JLabel contentLabel = new JLabel("Content:");
 		contentLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		contentLabel.setBounds(27, 125, 100, 20);
 		contentPane.add(contentLabel);
 
-		// Content Area with Scroll
 		contentArea = new JTextArea();
 		contentArea.setLineWrap(true);
 		contentArea.setWrapStyleWord(true);
@@ -106,32 +100,27 @@ public class Onboarding extends JFrame {
 		scrollPane.setBounds(27, 145, 430, 120);
 		contentPane.add(scrollPane);
 
-		// Error Label
 		errorLabel = new JLabel("");
 		errorLabel.setForeground(SystemColor.menuText);
 		errorLabel.setBounds(27, 270, 430, 20);
 		contentPane.add(errorLabel);
 
-		// Create Node Button
 		JButton createButton = new JButton("Create Node");
 		createButton.setBounds(27, 300, 210, 40);
 		createButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		contentPane.add(createButton);
 
-		// Skip Button
 		JButton skipButton = new JButton("Skip");
 		skipButton.setBounds(247, 300, 210, 40);
 		skipButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		contentPane.add(skipButton);
 
-		// Create Node Button Action
 		createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createNode();
 			}
 		});
 
-		// Skip Button Action
 		skipButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -159,7 +148,6 @@ public class Onboarding extends JFrame {
 			return;
 		}
 
-		// If projectId is 0, create a default project first
 		if (projectId <= 0) {
 			try {
 				System.out.println("Debug: projectId is " + projectId + ", getting or creating default project...");
@@ -209,11 +197,8 @@ public class Onboarding extends JFrame {
 				errorLabel.setForeground(new java.awt.Color(0, 128, 0));
 				System.out.println("Debug: Node created successfully!");
 				
-				// Clear fields
 				titleField.setText("");
 				contentArea.setText("");
-
-				// Close after 2 seconds
 				new Thread(() -> {
 					try {
 						Thread.sleep(2000);
