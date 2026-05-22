@@ -110,6 +110,12 @@ public class Onboarding extends JFrame {
 		btnBackhome.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnBackhome.setBounds(132, 351, 210, 40);
 		contentPane.add(btnBackhome);
+		
+		btnBackhome.addActionListener(new ActionListener() {
+			public void actionPerformed (ActionEvent e) {
+				backToHome();
+			}
+		});
 
 		createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -215,5 +221,10 @@ public class Onboarding extends JFrame {
 			errorLabel.setText("Database error: " + e.getMessage());
 			errorLabel.setForeground(new java.awt.Color(255, 0, 0));
 		}
+	}
+	
+	private void backToHome() {
+		
+		
 	}
 }
