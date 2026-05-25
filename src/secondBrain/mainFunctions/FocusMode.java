@@ -1,23 +1,29 @@
 package secondBrain.mainFunctions;
 
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JTextArea;
 import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.SystemColor;
-import javax.swing.JToggleButton;
+import javax.swing.border.EmptyBorder;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JScrollPane;
 
 public class FocusMode extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JTextArea noteTextArea;
+	private JLabel noteTitle;
+	private String noteContent = "";
+	private String noteHeading = "";
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -31,22 +37,110 @@ public class FocusMode extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public FocusMode() {
+		setTitle("Focus Mode - SecondBrain");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 343, 430);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		setBounds(100, 100, 900, 700);
+		setLocationRelativeTo(null);
 		
-		JLabel lblNewLabel = new JLabel("Do you want turn on focus mode?");
-		lblNewLabel.setForeground(SystemColor.textHighlight);
-		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblNewLabel.setBounds(43, 45, 235, 22);
-		contentPane.add(lblNewLabel);
-
+		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
+		contentPane.setBorder(new EmptyBorder(30, 40, 30, 40));
+		contentPane.setLayout(new BorderLayout(0, 20));
+		setContentPane(contentPane);
+		
+		initializeUI();
+		
+		addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					exitFocusMode();
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {}
+			@Override
+			public void keyTyped(KeyEvent e) {}
+		});
+		
+		setFocusable(true);
 	}
+
+
+	private void initializeUI() {
+		noteTitle = new JLabel(noteHeading);
+		noteTitle.setFont(new Font("Arial", Font.BOLD, 32));
+		noteTitle.setForeground(new Color(50, 50, 50));
+		contentPane.add(noteTitle, BorderLayout.NORTH);
+		
+		noteTextArea = new JTextArea();
+		noteTextArea.setText(noteContent);
+		noteTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
+		noteTextArea.setLineWrap(true);
+		noteTextArea.setWrapStyleWord(true);
+		noteTextArea.setEditable(true);
+		noteTextArea.setBackground(Color.WHITE);
+		noteTextArea.setForeground(new Color(50, 50, 50));
+		noteTextArea.setCaretColor(new Color(0, 150, 200));
+		noteTextArea.setBorder(new EmptyBorder(10, 10, 10, 10));
+		noteTextArea.setMargin(new java.awt.Insets(10, 10, 10, 10));
+		
+		JScrollPane scrollPane = new JScrollPane(noteTextArea);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBorder(null);
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+		
+		JLabel footerHint = new JLabel("Press ESC to exit focus mode");
+		footerHint.setFont(new Font("Arial", Font.ITALIC, 12));
+		footerHint.setForeground(new Color(150, 150, 150));
+		contentPane.add(footerHint, BorderLayout.SOUTH);
+	}
+
+	/**
+	 * Set the note content to display in focus mode.
+	 * 
+	 * @param title   The note title/heading
+	 * @param content The note content
+	 */
+	public void setNoteContent(String title, String content) {
+		this.noteHeading = title != null ? title : "";
+		this.noteContent = content != null ? content : "";
+		
+		if (noteTitle != null) {
+			noteTitle.setText(this.noteHeading);
+		}
+		if (noteTextArea != null) {
+			noteTextArea.setText(this.noteContent);
+			noteTextArea.setCaretPosition(0);
+		}
+	}
+
+	private void exitFocusMode() {
+		String updatedContent = noteTextArea.getText();
+		
+		this.dispose();
+	}
+
+	/**
+	 * Get the current content being edited in focus mode.
+	 * 
+	 * @return The current text in the focus mode editor
+	 */
+	public String getNoteContent() {
+		return noteTextArea != null ? noteTextArea.getText() : "";
+	}
+
+	/**
+	 * Enable/disable editing in focus mode.
+	 * 
+	 * @param editable True to allow editing, false for read-only mode
+	 */
+	public void setEditable(boolean editable) {
+		if (noteTextArea != null) {
+			noteTextArea.setEditable(editable);
+		}
+	}
+
 }

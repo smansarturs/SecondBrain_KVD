@@ -110,7 +110,6 @@ public class ConnectionEditor extends JFrame {
     }
 
     private void revertAllChanges() {
-        // Restore deleted nodes
         for (NodeModel n : deletedNodes) {
             try {
                 Database db = new Database();

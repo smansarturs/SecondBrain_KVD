@@ -72,6 +72,11 @@ public class Home extends JFrame {
 		JButton btnNewButton_2 = new JButton("Focus mode");
 		btnNewButton_2.setBounds(27, 228, 311, 34);
 		contentPane.add(btnNewButton_2);
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openFocusMode();
+			}
+		});
 		
 		JButton btnNewButton_3 = new JButton("Search view");
 		btnNewButton_3.setBounds(27, 273, 311, 34);
@@ -122,12 +127,27 @@ public class Home extends JFrame {
 					ConnectionEditor conneditorFrame = new ConnectionEditor(userId, 0);
 					conneditorFrame.setVisible(true);
 				} catch (Exception e) {
-					System.err.println("Error opening Onboarding: " + e.getMessage());
+					System.err.println("Error opening connection editor: " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
 		});
 		
+	}
+	
+	private void openFocusMode () {
+		EventQueue.invokeLater(new Runnable () {
+			public void run () {
+				try {
+					System.out.println("Debug: Opening Focus mode with userId = " + userId);
+					FocusMode focusModeFrame = new FocusMode(userId, 0);
+					focusModeFrame.setVisible(true);
+				} catch (Exception e) {
+					System.err.println("Error opening focus mode: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	public int getUserId() {
