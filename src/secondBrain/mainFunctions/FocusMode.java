@@ -23,6 +23,8 @@ public class FocusMode extends JFrame {
 	private JLabel noteTitle;
 	private String noteContent = "";
 	private String noteHeading = "";
+	private int userId;
+	private int nodeId;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -38,6 +40,13 @@ public class FocusMode extends JFrame {
 	}
 
 	public FocusMode() {
+		this(0, 0);
+	}
+
+	public FocusMode(int userId, int nodeId) {
+		this.userId = userId;
+		this.nodeId = nodeId;
+		
 		setTitle("Focus Mode - SecondBrain");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 700);
@@ -141,6 +150,14 @@ public class FocusMode extends JFrame {
 		if (noteTextArea != null) {
 			noteTextArea.setEditable(editable);
 		}
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public int getNodeId() {
+		return nodeId;
 	}
 
 }
