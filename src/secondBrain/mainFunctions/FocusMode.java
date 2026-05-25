@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,6 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+import javax.swing.AbstractAction;
+import javax.swing.InputMap;
+import javax.swing.ActionMap;
 
 public class FocusMode extends JFrame {
 
@@ -48,7 +52,7 @@ public class FocusMode extends JFrame {
 		this.nodeId = nodeId;
 		
 		setTitle("Focus Mode - SecondBrain");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 900, 700);
 		setLocationRelativeTo(null);
 		
@@ -59,23 +63,23 @@ public class FocusMode extends JFrame {
 		setContentPane(contentPane);
 		
 		initializeUI();
-		
-		addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					exitFocusMode();
-				}
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {}
-			@Override
-			public void keyTyped(KeyEvent e) {}
-		});
-		
-		setFocusable(true);
+		setupEscapeKeyBinding();
 	}
 
+	private void setupEscapeKeyBinding() {
+		KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+		
+		InputMap inputMap = noteTextArea.getInputMap();
+		ActionMap actionMap = noteTextArea.getActionMap();
+		
+		inputMap.put(escapeKeyStroke, "exitFocusMode");
+		actionMap.put("exitFocusMode", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				exitFocusMode();
+			}
+		});
+	}
 
 	private void initializeUI() {
 		noteTitle = new JLabel(noteHeading);
@@ -128,7 +132,7 @@ public class FocusMode extends JFrame {
 
 	private void exitFocusMode() {
 		String updatedContent = noteTextArea.getText();
-		
+		System.out.println("Debug: Exiting focus mode. Content length: " + updatedContent.length());
 		this.dispose();
 	}
 
