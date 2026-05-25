@@ -101,6 +101,7 @@ public class ConnectionEditor extends JFrame {
     }
 
     private void saveAllChanges() {
+<<<<<<< HEAD
         for (ConnectionModel c : connections) {
             if (c.id <= 0) {
                 int id = dbInsertConnection(c.from.id, c.to.id, c.type);
@@ -110,6 +111,19 @@ public class ConnectionEditor extends JFrame {
     }
 
     private void revertAllChanges() {
+=======
+        // Save all connections
+        for (ConnectionModel c : connections) {
+            if (c.id <= 0) {
+                int id = dbInsertConnection(c.from.id, c.to.id, c.type);
+                if (id > 0) c.id = id;
+            }
+        }
+    }
+
+    private void revertAllChanges() {
+        // Restore deleted nodes
+>>>>>>> branch 'main' of git@github-jtt-1p:smansarturs/SecondBrain_KVD.git
         for (NodeModel n : deletedNodes) {
             try {
                 Database db = new Database();
