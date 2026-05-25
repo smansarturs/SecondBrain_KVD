@@ -35,11 +35,11 @@ public class ConnectionEditor extends JFrame {
     private JComboBox<ProjectItem> cmbProject;
     private JLabel lblStatus;
 
-    // Canvas
     private NodeCanvas canvas;
 
     private final List<NodeModel>       nodes       = new ArrayList<>();
     private final List<ConnectionModel> connections = new ArrayList<>();
+    private final List<NodeModel>       deletedNodes = new ArrayList<>();
 
     private NodeModel  draggedNode    = null;
     private int        dragOffX, dragOffY;
@@ -90,11 +90,45 @@ public class ConnectionEditor extends JFrame {
         );
 
         if (result == JOptionPane.YES_OPTION) {
+            saveAllChanges();
             setStatus("Changes saved.");
             dispose();
         } else if (result == JOptionPane.NO_OPTION) {
+            revertAllChanges();
+            setStatus("Changes discarded.");
             dispose();
         }
+    }
+
+    private void saveAllChanges() {
+        for (ConnectionModel c : connections) {
+            if (c.id <= 0) {
+                int id = dbInsertConnection(c.from.id, c.to.id, c.type);
+                if (id > 0) c.id = id;
+            }
+        }
+    }
+
+    private void revertAllChanges() {
+        // Restore deleted nodes
+        for (NodeModel n : deletedNodes) {
+            try {
+                Database db = new Database();
+                Connection conn = db.getConn();
+                PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO nodes (id, title, content, project_id, x_position, y_position, created_at) " +
+                    "VALUES (?, ?, '', ?, ?, ?, NOW())");
+                ps.setInt(1, n.id);
+                ps.setString(2, n.title);
+                ps.setInt(3, projectId);
+                ps.setFloat(4, n.x);
+                ps.setFloat(5, n.y);
+                ps.executeUpdate();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        deletedNodes.clear();
     }
 
     private void buildTopBar() {
@@ -165,6 +199,7 @@ public class ConnectionEditor extends JFrame {
         ProjectItem sel = (ProjectItem) cmbProject.getSelectedItem();
         if (sel == null) return;
         projectId = sel.id;
+        deletedNodes.clear();
         loadNodesAndConnections();
     }
 
@@ -547,6 +582,7 @@ public class ConnectionEditor extends JFrame {
         dbDeleteNode(n);
         nodes.remove(n);
         connections.removeIf(c -> c.from == n || c.to == n);
+        deletedNodes.add(n);
         setStatus("Node \u201c" + n.title + "\u201d deleted.");
         canvas.repaint();
     }
