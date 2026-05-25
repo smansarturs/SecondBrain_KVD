@@ -81,6 +81,11 @@ public class Home extends JFrame {
 		JButton btnNewButton_3 = new JButton("Search view");
 		btnNewButton_3.setBounds(27, 273, 311, 34);
 		contentPane.add(btnNewButton_3);
+		btnNewButton_3.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+				openSearchView();
+			}
+		});
 		
 		JButton btnNewButton_4 = new JButton("Canvas view");
 		btnNewButton_4.setBounds(27, 318, 311, 34);
@@ -144,6 +149,21 @@ public class Home extends JFrame {
 					focusModeFrame.setVisible(true);
 				} catch (Exception e) {
 					System.err.println("Error opening focus mode: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	private void openSearchView () {
+		EventQueue.invokeLater(new Runnable () {
+			public void run () {
+				try {
+					System.out.println("Debug : Opening Search view with userId = " + userId);
+					SearchView searchViewFrame = new SearchView(userId);
+					searchViewFrame.setVisible(true);
+				} catch (Exception e) {
+					System.err.println("Error opening search view: " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
