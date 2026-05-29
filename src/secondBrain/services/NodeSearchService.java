@@ -26,38 +26,31 @@ public class NodeSearchService {
 	 * @return List of nodes matching the search query
 	 * @throws SQLException
 	 */
-	public List<Node> searchByText(String query, int projectId) throws SQLException {
-		List<Node> results = new ArrayList<>();
+	public List<Node> searchByText(String searchText, int projectId) throws SQLException {
+	    List<Node> results = new ArrayList<>();
 
-		if (query == null || query.trim().isEmpty() || projectId <= 0) {
-			return results;
-		}
+	    if (searchText == null || searchText.trim().isEmpty() || projectId <= 0) {
+	        return results;
+	    }
 
-		Connection conn = this.db.getConn();
-		String searchTerm = "%" + query + "%";
+	    Connection conn = this.db.getConn();
+	    String query = "SELECT * FROM " + TABLE_NAME
+	            + " WHERE project_id = ? AND (title LIKE ? OR content LIKE ?)";
 
-		String sqlQuery = "SELECT id, project_id, title, content, x_position, y_position, created_at FROM "
-				+ TABLE_NAME + " WHERE project_id = ? AND (title LIKE ? OR content LIKE ?)";
+	    PreparedStatement stmt = conn.prepareStatement(query);
+	    stmt.setInt(1, projectId);
+	    stmt.setString(2, "%" + searchText + "%");
+	    stmt.setString(3, "%" + searchText + "%");
+	    ResultSet rs = stmt.executeQuery();
 
-		try {
-			PreparedStatement stmt = conn.prepareStatement(sqlQuery);
-			stmt.setInt(1, projectId);
-			stmt.setString(2, searchTerm);
-			stmt.setString(3, searchTerm);
+	    while (rs.next()) {
+	        Node node = new Node(rs.getInt("id"), rs.getInt("project_id"), rs.getString("title"),
+	                rs.getString("content"), rs.getFloat("x_position"), rs.getFloat("y_position"),
+	                rs.getTimestamp("created_at").getTime());
+	        results.add(node);
+	    }
 
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				Node node = new Node(rs.getInt("id"), rs.getInt("project_id"), rs.getString("title"),
-						rs.getString("content"), rs.getFloat("x_position"), rs.getFloat("y_position"),
-						rs.getTimestamp("created_at").getTime());
-				results.add(node);
-			}
-		} catch (SQLException e) {
-			System.err.println("SQLException in searchByText: " + e.getMessage());
-			e.printStackTrace();
-		}
-
-		return results;
+	    return results;
 	}
 
 	/**

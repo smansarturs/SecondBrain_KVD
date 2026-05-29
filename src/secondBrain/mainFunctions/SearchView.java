@@ -5,6 +5,9 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -158,6 +161,8 @@ public class SearchView extends JFrame {
 			listModel.addElement("Error: " + e.getMessage());
 		}
 	}
+	
+
 
 	
 	private List<String> parseTagsInput(String input) {
@@ -180,4 +185,6 @@ public class SearchView extends JFrame {
 		}
 		return null;
 	}
+	
+
 }

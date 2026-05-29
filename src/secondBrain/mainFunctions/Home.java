@@ -32,7 +32,7 @@ public class Home extends JFrame {
 	}
 
 	public Home() {
-		this(0);
+		setResizable(false);
 	}
 
 	public Home(int userId) {
