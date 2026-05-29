@@ -25,6 +25,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 
 import secondBrain.service.Node;
+import secondBrain.services.NodeSearchService;
 import secondBrain.services.NodeService;
 
 public class SearchView extends JFrame {
@@ -117,54 +118,54 @@ public class SearchView extends JFrame {
 
 
 
-
-	/**
-	 * Perform the search based on selected type
-	 */
 	private void performSearch() {
-		String searchInput = textField.getText().trim();
-		String searchType = (String) comboBox.getSelectedItem();
-
-		if (searchInput.isEmpty()) {
-			listModel.clear();
-			listModel.addElement("Please enter a search term");
-			return;
-		}
-
-		try {
-			NodeService nodeService = new NodeService();
-			searchResults.clear();
-			listModel.clear();
-
-			if ("By Text".equals(searchType)) {
-				searchResults = nodeService.searchByText(searchInput, projectId);
-			} else if ("By Tags".equals(searchType)) {
-				List<String> tags = parseTagsInput(searchInput);
-				searchResults = nodeService.searchByTags(tags, projectId);
-			} else if ("By Files".equals(searchType)) {
-				searchResults = nodeService.searchByFiles(searchInput, projectId);
-			}
-
-			if (searchResults.isEmpty()) {
-				listModel.addElement("No results found");
-			} else {
-				for (Node node : searchResults) {
-					String displayText = node.getId() + " - " + node.getTitle();
-					listModel.addElement(displayText);
-				}
-			}
-
-		} catch (ClassNotFoundException | SQLException e) {
-			System.err.println("Error during search: " + e.getMessage());
-			e.printStackTrace();
-			listModel.clear();
-			listModel.addElement("Error: " + e.getMessage());
-		}
+	    String searchInput = textField.getText().trim();
+	    String searchType = (String) comboBox.getSelectedItem();
+	 
+	    if (searchInput.isEmpty()) {
+	        listModel.clear();
+	        listModel.addElement("Please enter a search term");
+	        return;
+	    }
+	 
+	    try {
+	        NodeSearchService nodeSearchService = new NodeSearchService();
+	        searchResults.clear();
+	        listModel.clear();
+	 
+	        System.out.println("Searching by: " + searchType);
+	        System.out.println("Search input: " + searchInput);
+	        System.out.println("Project ID: " + projectId);
+	 
+	        if ("By Text".equals(searchType)) {
+	            searchResults = nodeSearchService.searchByText(searchInput, projectId);
+	        } else if ("By Tags".equals(searchType)) {
+	            List<String> tags = parseTagsInput(searchInput);
+	            searchResults = nodeSearchService.searchByTags(tags, projectId);
+	        } else if ("By Files".equals(searchType)) {
+	            searchResults = nodeSearchService.searchByFiles(searchInput, projectId);
+	        }
+	 
+	        System.out.println("Results found: " + searchResults.size());
+	 
+	        if (searchResults.isEmpty()) {
+	            listModel.addElement("No results found");
+	        } else {
+	            for (Node node : searchResults) {
+	                String displayText = node.getId() + " - " + node.getTitle();
+	                listModel.addElement(displayText);
+	            }
+	        }
+	 
+	    } catch (ClassNotFoundException | SQLException e) {
+	        System.err.println("Error during search: " + e.getMessage());
+	        e.printStackTrace();
+	        listModel.clear();
+	        listModel.addElement("Error: " + e.getMessage());
+	    }
 	}
 	
 
-
-	
 	private List<String> parseTagsInput(String input) {
 		List<String> tags = new ArrayList<>();
 		String[] tagArray = input.split(",");

@@ -184,10 +184,10 @@ public class Onboarding extends JFrame {
 		}
 
 		try {
-			System.out.println("Debug: Creating node with title='" + title + "', content length=" + content.length() + ", projectId=" + projectId);
+			System.out.println("Debug: Creating node with title='" + title + "', content length=" + content.length() + ", projectId=" + projectId + ", userId=" + userId);
 			
 			NodeService nodeService = new NodeService();
-			boolean isCreated = nodeService.insert(title, content, projectId);
+			boolean isCreated = nodeService.insert (userId, title, content, projectId);
 
 			if (isCreated) {
 				errorLabel.setText("Node created successfully!");

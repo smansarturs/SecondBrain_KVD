@@ -32,6 +32,7 @@ public class ConnectionEditor extends JFrame {
     private final int userId;
     private int projectId;
 
+    // Top bar
     private JComboBox<ProjectItem> cmbProject;
     private JLabel lblStatus;
 
@@ -39,7 +40,6 @@ public class ConnectionEditor extends JFrame {
 
     private final List<NodeModel>       nodes       = new ArrayList<>();
     private final List<ConnectionModel> connections = new ArrayList<>();
-    private final List<NodeModel>       deletedNodes = new ArrayList<>();
 
     private NodeModel  draggedNode    = null;
     private int        dragOffX, dragOffY;
@@ -58,84 +58,41 @@ public class ConnectionEditor extends JFrame {
         this.userId    = userId;
         this.projectId = projectId;
 
-        setTitle("SecondBrain – Connection Editor");
+        setTitle("Second Brain – Connection Editor");
         setSize(1000, 680);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                int choice = JOptionPane.showOptionDialog(
+                    ConnectionEditor.this,
+                    "Do you want to save the connection?",
+                    "Save Connection",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new String[]{"Save", "Don't Save"},
+                    "Save"
+                );
+                if (choice == JOptionPane.YES_OPTION) {
+                    for (NodeModel n : nodes) dbUpdateNodePosition(n);
+                    setStatus("Saved.");
+                }
+                dispose();
+            }
+        });
 
         buildTopBar();
         canvas = new NodeCanvas();
         add(canvas, BorderLayout.CENTER);
         buildBottomBar();
 
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                handleClosing();
-            }
-        });
-
         loadProjects();
     }
 
-    private void handleClosing() {
-        int result = JOptionPane.showConfirmDialog(
-            this,
-            "Do you want to save connection?",
-            "Exit Connection Editor",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null
-        );
-
-        if (result == JOptionPane.YES_OPTION) {
-            saveAllChanges();
-            setStatus("Changes saved.");
-            dispose();
-        } else if (result == JOptionPane.NO_OPTION) {
-            revertAllChanges();
-            setStatus("Changes discarded.");
-            dispose();
-        }
-    }
-
-    private void saveAllChanges() {
-        for (ConnectionModel c : connections) {
-            if (c.id <= 0) {
-                int id = dbInsertConnection(c.from.id, c.to.id, c.type);
-                if (id > 0) c.id = id;
-            }
-        }
-    }
-
-
-    private void revertAllChanges() {
-        for (NodeModel n : deletedNodes) {
-            try {
-                Database db = new Database();
-                Connection conn = db.getConn();
-                PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO nodes (id, title, content, project_id, x_position, y_position, created_at) " +
-                    "VALUES (?, ?, '', ?, ?, ?, NOW())");
-                ps.setInt(1, n.id);
-                ps.setString(2, n.title);
-                ps.setInt(3, projectId);
-                ps.setFloat(4, n.x);
-                ps.setFloat(5, n.y);
-                ps.executeUpdate();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-        for (ConnectionModel c : connections) {
-            if (c.id <= 0) {
-                int id = dbInsertConnection(c.from.id, c.to.id, c.type);
-                if (id > 0) c.id = id;
-            }
-        }
-        deletedNodes.clear();
-    }
 
     private void buildTopBar() {
         JPanel top = new JPanel(null);
@@ -194,7 +151,10 @@ public class ConnectionEditor extends JFrame {
             for (int i = 0; i < cmbProject.getItemCount(); i++) {
                 if (cmbProject.getItemAt(i).id == projectId) { cmbProject.setSelectedIndex(i); break; }
             }
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException ex) {
+            setStatus("DB driver error: " + ex.getMessage());
+            ex.printStackTrace();
+        } catch (SQLException ex) {
             setStatus("Error loading projects: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -205,7 +165,6 @@ public class ConnectionEditor extends JFrame {
         ProjectItem sel = (ProjectItem) cmbProject.getSelectedItem();
         if (sel == null) return;
         projectId = sel.id;
-        deletedNodes.clear();
         loadNodesAndConnections();
     }
 
@@ -240,7 +199,10 @@ public class ConnectionEditor extends JFrame {
             }
 
             setStatus(nodes.size() + " nodes, " + connections.size() + " connections.");
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException ex) {
+            setStatus("DB driver error: " + ex.getMessage());
+            ex.printStackTrace();
+        } catch (SQLException ex) {
             setStatus("DB error: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -253,10 +215,13 @@ public class ConnectionEditor extends JFrame {
             Database db = new Database();
             Connection conn = db.getConn();
             PreparedStatement ps = conn.prepareStatement(
-                "INSERT INTO nodes (title, content, project_id, x_position, y_position, created_at) " +
-                "VALUES (?, '', ?, ?, ?, NOW())", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, title); ps.setInt(2, projectId);
-            ps.setFloat(3, x); ps.setFloat(4, y);
+                "INSERT INTO nodes (title, content, project_id, user_id, x_position, y_position, created_at) " +
+                "VALUES (?, '', ?, ?, ?, ?, NOW())", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, title);
+            ps.setInt(2, projectId);
+            ps.setInt(3, userId);
+            ps.setFloat(4, x);
+            ps.setFloat(5, y);
             ps.executeUpdate();
             ResultSet keys = ps.getGeneratedKeys();
             if (keys.next()) return keys.getInt(1);
@@ -345,20 +310,15 @@ public class ConnectionEditor extends JFrame {
         return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3;
     }
 
-    private Point outputPort(NodeModel n) { 
-    	return new Point(n.x + NodeModel.W, n.y + NodeModel.H / 2); 
-    	
-    }
-    private Point inputPort(NodeModel n)  { 
-    	return new Point(n.x,               n.y + NodeModel.H / 2);
-    	
-    }
-    
+    private Point outputPort(NodeModel n) { return new Point(n.x + NodeModel.W, n.y + NodeModel.H / 2); }
+    private Point inputPort(NodeModel n)  { return new Point(n.x,               n.y + NodeModel.H / 2); }
+
     private boolean nearOutputPort(int mx, int my, NodeModel n) {
         Point p = outputPort(n);
         return Math.hypot(mx - p.x, my - p.y) <= 10;
     }
 
+    
     class NodeCanvas extends JPanel {
 
         NodeCanvas() {
@@ -415,7 +375,6 @@ public class ConnectionEditor extends JFrame {
                         setStatus("Moved \u201c" + draggedNode.title + "\u201d");
                         draggedNode = null;
                     }
-                    
                     if (connectingFrom != null) {
                         NodeModel target = nodeAt(mx, my);
                         if (target != null && target != connectingFrom) finishConnection(connectingFrom, target);
@@ -436,7 +395,6 @@ public class ConnectionEditor extends JFrame {
                         setCursor(Cursor.getDefaultCursor());
                 }
             };
-            
             addMouseListener(ma);
             addMouseMotionListener(ma);
         }
@@ -483,7 +441,9 @@ public class ConnectionEditor extends JFrame {
             g2.setColor(Color.WHITE);
             FontMetrics fm = g2.getFontMetrics();
             String label = n.title.length() > 16 ? n.title.substring(0, 14) + "\u2026" : n.title;
-            g2.drawString(label, n.x + (NodeModel.W - fm.stringWidth(label)) / 2, n.y + (NodeModel.H + fm.getAscent() - fm.getDescent()) / 2);
+            g2.drawString(label,
+                n.x + (NodeModel.W - fm.stringWidth(label)) / 2,
+                n.y + (NodeModel.H + fm.getAscent() - fm.getDescent()) / 2);
 
             drawPort(g2, outputPort(n), hov);
             drawPort(g2, inputPort(n),  false);
@@ -519,9 +479,11 @@ public class ConnectionEditor extends JFrame {
             drawCurve(g2, src.x, src.y, dest.x, dest.y, new Color(0, 200, 100), 1.5f, true);
         }
 
-        private void drawCurve(Graphics2D g2, int x1, int y1, int x2, int y2, Color color, float stroke, boolean dashed) {
+        private void drawCurve(Graphics2D g2, int x1, int y1, int x2, int y2,
+                                Color color, float stroke, boolean dashed) {
             double ctrl = Math.abs(x2 - x1) / 2.0;
-            CubicCurve2D curve = new CubicCurve2D.Double (x1, y1, x1 + ctrl, y1, x2 - ctrl, y2, x2, y2);
+            CubicCurve2D curve = new CubicCurve2D.Double(
+                x1, y1, x1 + ctrl, y1, x2 - ctrl, y2, x2, y2);
             g2.setStroke(dashed
                 ? new BasicStroke(stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10, new float[]{6,4}, 0)
                 : new BasicStroke(stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
@@ -588,7 +550,6 @@ public class ConnectionEditor extends JFrame {
         dbDeleteNode(n);
         nodes.remove(n);
         connections.removeIf(c -> c.from == n || c.to == n);
-        deletedNodes.add(n);
         setStatus("Node \u201c" + n.title + "\u201d deleted.");
         canvas.repaint();
     }
@@ -636,9 +597,11 @@ public class ConnectionEditor extends JFrame {
 
     static class ProjectItem {
         final int id; final String name;
-        ProjectItem(int id, String name) { this.id = id; this.name = name; }
+        ProjectItem(int id, String name) { this.id = id; this.name = name;
+        
+        }
         @Override 
-        public String toString() { 
+        public String toString() {
         	return name;
         }
     }
