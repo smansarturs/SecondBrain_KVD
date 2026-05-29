@@ -18,31 +18,23 @@ public class NodeService {
 		db = new Database();
 	}
 
-	/**
-	 * Inserts a node with default position, no userId.
-	 */
+
 	public boolean insert(String title, String content, int projectId) throws SQLException {
 		return insert(0, title, content, projectId, 0.0f, 0.0f);
 	}
 
-	/**
-	 * Inserts a node with userId and default position. Used by Onboarding.
-	 */
+
 	public boolean insert(int userId, String title, String content, int projectId) throws SQLException {
 		return insert(userId, title, content, projectId, 0.0f, 0.0f);
 	}
 
-	/**
-	 * Inserts a node with specified position, no userId.
-	 */
+
 	public boolean insert(String title, String content, int projectId, float xPosition, float yPosition)
 			throws SQLException {
 		return insert(0, title, content, projectId, xPosition, yPosition);
 	}
 
-	/**
-	 * Core insert — all fields including userId and position.
-	 */
+
 	public boolean insert(int userId, String title, String content, int projectId, float xPosition, float yPosition)
 			throws SQLException {
 		if (title == null || content == null || projectId <= 0) {
@@ -73,9 +65,7 @@ public class NodeService {
 		}
 	}
 
-	/**
-	 * Updates an existing node in the database.
-	 */
+
 	public boolean update(int nodeId, String title, String content) throws SQLException {
 		if (nodeId <= 0 || title == null || content == null) {
 			return false;
@@ -93,9 +83,6 @@ public class NodeService {
 		return rowsAffected > 0;
 	}
 
-	/**
-	 * Deletes a node from the database.
-	 */
 	public boolean delete(int nodeId) throws SQLException {
 		if (nodeId <= 0) {
 			return false;
@@ -118,7 +105,7 @@ public class NodeService {
 	 * @param projectId  the project to search within
 	 * @return list of matching Node objects
 	 */
-	public List<Node> searchByText(String searchText, int projectId) throws SQLException {
+	public List<Node> searchByText(String searchText, int projectId, int userId) throws SQLException {
 		List<Node> results = new ArrayList<>();
 
 		if (searchText == null || searchText.trim().isEmpty() || projectId <= 0) {
@@ -127,11 +114,10 @@ public class NodeService {
 
 		Connection conn = this.db.getConn();
 
-		// Use LIKE with wildcards for partial matching on both title and content
 		String query = "SELECT id, title, content, project_id, x_position, y_position, created_at "
 				+ "FROM " + TABLE_NAME + " "
 				+ "WHERE project_id = ? "
-				+ "AND (title LIKE ? OR content LIKE ?)";
+				+ "AND (title LIKE ? OR content LIKE ?) AND user_id = ?";
 
 		try {
 			PreparedStatement stmt = conn.prepareStatement(query);
@@ -139,6 +125,7 @@ public class NodeService {
 			stmt.setInt(1, projectId);
 			stmt.setString(2, pattern);
 			stmt.setString(3, pattern);
+			stmt.setInt(4, userId);
 
 			ResultSet rs = stmt.executeQuery();
 
@@ -174,7 +161,6 @@ public class NodeService {
 
 		Connection conn = this.db.getConn();
 
-		// Build a query that matches any of the provided tags in title or content
 		StringBuilder query = new StringBuilder(
 				"SELECT id, title, content, project_id, x_position, y_position, created_at "
 				+ "FROM " + TABLE_NAME + " "
@@ -249,9 +235,7 @@ public class NodeService {
 		return results;
 	}
 
-	/**
-	 * Maps a ResultSet row to a Node object.
-	 */
+
 	private Node mapRow(ResultSet rs) throws SQLException {
 		return new Node(
 			rs.getInt("id"),

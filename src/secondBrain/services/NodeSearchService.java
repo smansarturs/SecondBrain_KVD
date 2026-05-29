@@ -37,7 +37,7 @@ public class NodeSearchService {
                 + "x_position, y_position, created_at "
                 + "FROM " + TABLE_NAME + " "
                 + "WHERE project_id = ? "
-                + "AND (title LIKE ? OR CAST(content AS CHAR) LIKE ?)";
+                + "AND (title LIKE ? OR content LIKE ?)";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(query);

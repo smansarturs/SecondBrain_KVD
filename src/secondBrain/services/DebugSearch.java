@@ -17,19 +17,15 @@ public class DebugSearch {
             Database db = new Database();
             Connection conn = db.getConn();
             System.out.println("DB connected : " + (conn != null && !conn.isClosed()));
- 
-            // 1. How many nodes exist in total?
             PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM nodes");
             ResultSet rs = ps.executeQuery();
             if (rs.next()) System.out.println("Total nodes in DB : " + rs.getInt(1));
  
-            // 2. How many nodes for this projectId?
             ps = conn.prepareStatement("SELECT COUNT(*) FROM nodes WHERE project_id = ?");
             ps.setInt(1, projectId);
             rs = ps.executeQuery();
             if (rs.next()) System.out.println("Nodes for project " + projectId + " : " + rs.getInt(1));
  
-            // 3. Print all nodes for this project (title + content type info)
             ps = conn.prepareStatement(
                 "SELECT id, title, content, project_id FROM nodes WHERE project_id = ?");
             ps.setInt(1, projectId);
@@ -46,7 +42,6 @@ public class DebugSearch {
                     + " content='" + contentVal + "'");
             }
  
-            // 4. Try the LIKE query with CAST
             String pattern = "%" + searchText + "%";
             ps = conn.prepareStatement(
                 "SELECT id, title FROM nodes WHERE project_id = ? "
@@ -63,7 +58,6 @@ public class DebugSearch {
             }
             if (count == 0) System.out.println("  No matches with CAST LIKE");
  
-            // 5. Try without project_id filter (in case projectId is wrong)
             ps = conn.prepareStatement(
                 "SELECT id, title, project_id FROM nodes WHERE title LIKE ?");
             ps.setString(1, pattern);
