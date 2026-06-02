@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import secondBrain.data.User;
-import secondBrain.mainFunctions.Home;
+import secondBrain.forms.mainFunctions.Home;
 import secondBrain.services.UserService;
 
 public class Login extends JFrame {

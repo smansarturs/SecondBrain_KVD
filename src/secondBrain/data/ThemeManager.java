@@ -22,14 +22,12 @@ public class ThemeManager {
 	private static ThemeManager instance;
 	private boolean darkModeEnabled = false;
 	private WeakHashMap<JFrame, Boolean> managedFrames = new WeakHashMap<>();
-	
-	// Color scheme for dark mode
+
 	private static final Color DARK_BACKGROUND = new Color(30, 30, 30);
 	private static final Color DARK_FOREGROUND = new Color(240, 240, 240);
 	private static final Color DARK_PANEL = new Color(45, 45, 45);
 	private static final Color DARK_BUTTON = new Color(60, 60, 60);
 	
-	// Color scheme for light mode
 	private static final Color LIGHT_BACKGROUND = new Color(255, 255, 255);
 	private static final Color LIGHT_FOREGROUND = new Color(0, 0, 0);
 	private static final Color LIGHT_PANEL = new Color(240, 240, 240);
@@ -38,9 +36,7 @@ public class ThemeManager {
 		this.darkModeEnabled = UserPreferences.getInstance().isDarkModeEnabled();
 	}
 	
-	/**
-	 * Get singleton instance of ThemeManager
-	 */
+
 	public static synchronized ThemeManager getInstance() {
 		if (instance == null) {
 			instance = new ThemeManager();
@@ -48,16 +44,12 @@ public class ThemeManager {
 		return instance;
 	}
 	
-	/**
-	 * Register a JFrame to be managed by the theme manager
-	 */
+
 	public void registerFrame(JFrame frame) {
 		managedFrames.put(frame, true);
 	}
 	
-	/**
-	 * Apply current theme to a specific JFrame
-	 */
+
 	public void applyTheme(JFrame frame) {
 		registerFrame(frame);
 		if (darkModeEnabled) {
@@ -67,13 +59,10 @@ public class ThemeManager {
 		}
 	}
 	
-	/**
-	 * Set dark mode and update all registered frames
-	 */
+
 	public void setDarkMode(boolean enabled) {
 		this.darkModeEnabled = enabled;
 		
-		// Update all managed frames
 		for (JFrame frame : managedFrames.keySet()) {
 			if (frame != null && frame.isDisplayable()) {
 				if (darkModeEnabled) {
@@ -84,13 +73,9 @@ public class ThemeManager {
 			}
 		}
 		
-		// Save preference
 		UserPreferences.getInstance().setDarkModeEnabled(enabled);
 	}
 	
-	/**
-	 * Apply dark mode colors to all components in a frame
-	 */
 	private void applyDarkMode(JFrame frame) {
 		JPanel contentPane = (JPanel) frame.getContentPane();
 		contentPane.setBackground(DARK_BACKGROUND);
@@ -99,10 +84,7 @@ public class ThemeManager {
 		applyThemeToComponents(contentPane, true);
 		frame.repaint();
 	}
-	
-	/**
-	 * Apply light mode colors to all components in a frame
-	 */
+
 	private void applyLightMode(JFrame frame) {
 		JPanel contentPane = (JPanel) frame.getContentPane();
 		contentPane.setBackground(LIGHT_BACKGROUND);
@@ -111,10 +93,7 @@ public class ThemeManager {
 		applyThemeToComponents(contentPane, false);
 		frame.repaint();
 	}
-	
-	/**
-	 * Recursively apply theme to all components
-	 */
+
 	private void applyThemeToComponents(Component component, boolean isDarkMode) {
 		if (component instanceof JLabel) {
 			component.setForeground(isDarkMode ? DARK_FOREGROUND : LIGHT_FOREGROUND);
@@ -152,17 +131,11 @@ public class ThemeManager {
 			}
 		}
 	}
-	
-	/**
-	 * Check if dark mode is currently enabled
-	 */
+
 	public boolean isDarkModeEnabled() {
 		return darkModeEnabled;
 	}
-	
-	/**
-	 * Clear all registered frames (useful on logout)
-	 */
+
 	public void clearFrames() {
 		managedFrames.clear();
 	}

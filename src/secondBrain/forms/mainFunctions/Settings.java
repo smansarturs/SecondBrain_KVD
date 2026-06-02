@@ -1,4 +1,4 @@
-package secondBrain.mainFunctions;
+package secondBrain.forms.mainFunctions;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -30,7 +30,7 @@ public class Settings extends JFrame {
 	private ThemeManager themeManager;
 	private LanguageManager languageManager;
 	private UserPreferences userPreferences;
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -67,7 +67,7 @@ public class Settings extends JFrame {
 	}
 	
 	private void initializeUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 397, 534);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -15,20 +15,14 @@ public class LanguageManager {
 	private LanguageManager() {
 		initializeTranslations();
 	}
-	
-	/**
-	 * Get singleton instance of LanguageManager
-	 */
+
 	public static synchronized LanguageManager getInstance() {
 		if (instance == null) {
 			instance = new LanguageManager();
 		}
 		return instance;
 	}
-	
-	/**
-	 * Initialize all language translations
-	 */
+
 	private void initializeTranslations() {
 		translations = new HashMap<>();
 		
@@ -206,10 +200,7 @@ public class LanguageManager {
 		
 		translations.put("Latviešu", latvian);
 	}
-	
-	/**
-	 * Get a translated string for the current language
-	 */
+
 	public String getString(String key) {
 		Map<String, String> currentTranslations = translations.get(currentLanguage);
 		if (currentTranslations == null) {
@@ -218,9 +209,7 @@ public class LanguageManager {
 		return currentTranslations.getOrDefault(key, key);
 	}
 	
-	/**
-	 * Set the current language
-	 */
+
 	public void setLanguage(String language) {
 		if (translations.containsKey(language)) {
 			this.currentLanguage = language;
@@ -229,9 +218,6 @@ public class LanguageManager {
 		}
 	}
 	
-	/**
-	 * Get the current language
-	 */
 	public String getCurrentLanguage() {
 		return currentLanguage;
 	}

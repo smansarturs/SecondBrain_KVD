@@ -1,4 +1,4 @@
-package secondBrain.mainFunctions;
+package secondBrain.forms.mainFunctions;
 
 import java.awt.EventQueue;
 import java.awt.Graphics;

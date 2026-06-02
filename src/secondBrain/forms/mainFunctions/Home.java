@@ -1,4 +1,4 @@
-package secondBrain.mainFunctions;
+package secondBrain.forms.mainFunctions;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -245,7 +245,7 @@ public class Home extends JFrame {
 			public void run () {
 				try {
 					System.out.println("Debug: Opening settings with userId = " + userId);
-					Settings settingsFrame = new Settings();
+					Settings settingsFrame = new Settings(userId);
 					settingsFrame.setVisible(true);
 				} catch (Exception e) {
 					System.err.println("Error opening settings: " + e.getMessage());

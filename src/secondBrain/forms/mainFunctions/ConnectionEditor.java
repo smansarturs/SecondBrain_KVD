@@ -1,4 +1,4 @@
-package secondBrain.mainFunctions;
+package secondBrain.forms.mainFunctions;
 
 import secondBrain.data.Project;
 import secondBrain.database.Database;
