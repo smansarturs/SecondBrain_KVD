@@ -20,6 +20,8 @@ import secondBrain.data.LanguageManager;
 import secondBrain.data.ThemeManager;
 import secondBrain.data.UserPreferences;
 import secondBrain.services.UserService;
+import secondBrain.forms.Login;
+import secondBrain.forms.Register;
 
 public class Settings extends JFrame {
 
@@ -197,7 +199,7 @@ public class Settings extends JFrame {
 					JOptionPane.INFORMATION_MESSAGE);
 				
 				userPreferences.clearUserData();
-				returnToLogin();
+				openRegister();
 			} else {
 				JOptionPane.showMessageDialog(this,
 					languageManager.getString("settings.delete.failed"),
@@ -225,7 +227,7 @@ public class Settings extends JFrame {
 		
 		if (response == JOptionPane.YES_OPTION) {
 			userPreferences.clearUserSession();
-			returnToLogin();
+			openLogin();
 		}
 	}
 	
@@ -286,10 +288,36 @@ public class Settings extends JFrame {
 	}
 	
 	/**
-	 * Return to login screen (placeholder implementation)
+	 * Open the Register GUI
 	 */
-	private void returnToLogin() {
+	private void openRegister() {
 		this.dispose();
-
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Register registerFrame = new Register();
+					registerFrame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Open the Login GUI
+	 */
+	private void openLogin() {
+		this.dispose();
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Login loginFrame = new Login();
+					loginFrame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }
