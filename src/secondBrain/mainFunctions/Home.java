@@ -1,16 +1,18 @@
 package secondBrain.mainFunctions;
 
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import java.awt.SystemColor;
-import java.awt.Font;
-import javax.swing.JButton;
+
+import secondBrain.services.ProjectService;
 
 public class Home extends JFrame {
 
@@ -90,6 +92,11 @@ public class Home extends JFrame {
 		JButton btnNewButton_4 = new JButton("Canvas view");
 		btnNewButton_4.setBounds(27, 318, 311, 34);
 		contentPane.add(btnNewButton_4);
+		btnNewButton_3.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+				openCanvasView();
+			}
+		});
 		
 		JLabel lblNewLabel_1 = new JLabel("What do you want to do?");
 		lblNewLabel_1.setForeground(SystemColor.textHighlight);
@@ -156,18 +163,49 @@ public class Home extends JFrame {
 	}
 	
 	private void openSearchView () {
+	    EventQueue.invokeLater(new Runnable () {
+	        public void run () {
+	            try {
+	                System.out.println("Debug : Opening Search view with userId = " + userId);
+
+	                ProjectService projectService = new ProjectService();
+	                int projectId = projectService.getOrCreateDefaultProject(userId);
+	                
+	                if (projectId > 0) {
+	                    SearchView searchViewFrame = new SearchView(userId, projectId);
+	                    searchViewFrame.setVisible(true);
+	                } else {
+	                    System.err.println("Error: Could not get project for user");
+	                }
+	            } catch (Exception e) {
+	                System.err.println("Error opening search view: " + e.getMessage());
+	                e.printStackTrace();
+	            }
+	        }
+	    });
+	}
+	
+	private void openCanvasView () {
 		EventQueue.invokeLater(new Runnable () {
-			public void run () {
-				try {
-					System.out.println("Debug : Opening Search view with userId = " + userId);
-					SearchView searchViewFrame = new SearchView(userId);
-					searchViewFrame.setVisible(true);
-				} catch (Exception e) {
-					System.err.println("Error opening search view: " + e.getMessage());
-					e.printStackTrace();
-				}
-			}
-		});
+	        public void run () {
+	            try {
+	                System.out.println("Debug : Opening Canvas view with userId = " + userId);
+
+	                ProjectService projectService = new ProjectService();
+	                int projectId = projectService.getOrCreateDefaultProject(userId);
+	                
+	                if (projectId > 0) {
+	                    CanvasView canvasViewFrame = new CanvasView(userId, projectId);
+	                    canvasViewFrame.setVisible(true);
+	                } else {
+	                    System.err.println("Error: Could not get project for user");
+	                }
+	            } catch (Exception e) {
+	                System.err.println("Error opening canvas view: " + e.getMessage());
+	                e.printStackTrace();
+	            }
+	        }
+	    });
 	}
 
 	public int getUserId() {

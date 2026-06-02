@@ -27,6 +27,7 @@ import javax.swing.ListSelectionModel;
 import secondBrain.service.Node;
 import secondBrain.services.NodeSearchService;
 import secondBrain.services.NodeService;
+import secondBrain.services.ProjectService;
 
 public class SearchView extends JFrame {
 
@@ -39,6 +40,7 @@ public class SearchView extends JFrame {
 	private DefaultListModel<String> listModel;
 	private List<Node> searchResults;
 	private int projectId;
+	private int userId;
 
 	/**
 	 * Launch the application.
@@ -47,8 +49,16 @@ public class SearchView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					SearchView frame = new SearchView(1);
-					frame.setVisible(true);
+					int userId = 1;
+					ProjectService projectService = new ProjectService();
+					int projectId = projectService.getOrCreateDefaultProject(userId);
+					
+					if (projectId > 0) {
+						SearchView frame = new SearchView(userId, projectId);
+						frame.setVisible(true);
+					} else {
+						System.err.println("Error: Could not get project for user");
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -58,7 +68,8 @@ public class SearchView extends JFrame {
 
 	
 
-	public SearchView(int projectId) {
+	public SearchView(int userId, int projectId) {
+		this.userId = userId;
 		this.projectId = projectId;
 		this.searchResults = new ArrayList<>();
 
