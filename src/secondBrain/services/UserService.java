@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import secondBrain.data.User;
 import secondBrain.database.Database;
-import secondBrain.service.User;
 
 
 

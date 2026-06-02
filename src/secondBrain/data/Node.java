@@ -1,4 +1,4 @@
-package secondBrain.service;
+package secondBrain.data;
 
 public class Node {
 	private int id;

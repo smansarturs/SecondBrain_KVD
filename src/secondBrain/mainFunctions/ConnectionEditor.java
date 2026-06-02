@@ -1,7 +1,7 @@
 package secondBrain.mainFunctions;
 
+import secondBrain.data.Project;
 import secondBrain.database.Database;
-import secondBrain.service.Project;
 import secondBrain.services.ProjectService;
 
 import javax.swing.*;

@@ -245,7 +245,11 @@ public class Home extends JFrame {
 			public void run () {
 				try {
 					System.out.println("Debug: Opening settings with userId = " + userId);
-					
+					Settings settingsFrame = new Settings();
+					settingsFrame.setVisible(true);
+				} catch (Exception e) {
+					System.err.println("Error opening settings: " + e.getMessage());
+					e.printStackTrace();
 				}
 			}
 		});

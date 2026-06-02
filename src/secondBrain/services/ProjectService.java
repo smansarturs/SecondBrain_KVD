@@ -8,8 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import secondBrain.data.Project;
 import secondBrain.database.Database;
-import secondBrain.service.Project;
 
 public class ProjectService {
 	private Database db;

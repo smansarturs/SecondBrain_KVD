@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import secondBrain.data.Node;
 import secondBrain.database.Database;
-import secondBrain.service.Node;
 
 public class NodeService {
 	private Database db;

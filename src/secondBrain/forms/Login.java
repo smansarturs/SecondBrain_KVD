@@ -15,9 +15,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import secondBrain.data.User;
 import secondBrain.mainFunctions.Home;
 import secondBrain.services.UserService;
-import secondBrain.service.User;
 
 public class Login extends JFrame {
 
@@ -41,7 +41,7 @@ public class Login extends JFrame {
 
 	public Login() {
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 377, 556);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

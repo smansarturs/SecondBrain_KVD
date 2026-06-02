@@ -24,7 +24,7 @@ import javax.swing.JList;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 
-import secondBrain.service.Node;
+import secondBrain.data.Node;
 import secondBrain.services.NodeSearchService;
 import secondBrain.services.NodeService;
 import secondBrain.services.ProjectService;
