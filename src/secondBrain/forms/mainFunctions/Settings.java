@@ -28,19 +28,20 @@ public class Settings extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private int userId;
+	private JFrame parentHome;  // Reference to the parent Home window
 	private UserService userService;
 	private ThemeManager themeManager;
 	private LanguageManager languageManager;
 	private UserPreferences userPreferences;
 	
 	/**
-	 * Launch the application.
+	 * Launch the application (standalone).
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Settings frame = new Settings(1);
+					Settings frame = new Settings(1, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,10 +51,12 @@ public class Settings extends JFrame {
 	}
 
 	/**
-	 * Create the frame with userId
+	 * Create the frame with userId and parent Home window reference.
+	 * Pass null for parentHome if opening standalone.
 	 */
-	public Settings(int userId) {
+	public Settings(int userId, JFrame parentHome) {
 		this.userId = userId;
+		this.parentHome = parentHome;
 		
 		try {
 			this.userService = new UserService();
@@ -69,7 +72,7 @@ public class Settings extends JFrame {
 	}
 	
 	private void initializeUI() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 397, 534);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -145,13 +148,9 @@ public class Settings extends JFrame {
 		});
 		contentPane.add(btnAboutUs);
 		
-		// Apply current theme
 		themeManager.applyTheme(this);
 	}
 	
-	/**
-	 * Toggle dark mode on/off and update all open GUI windows
-	 */
 	private void toggleDarkMode(JToggleButton toggleButton) {
 		boolean darkModeEnabled = toggleButton.isSelected();
 		userPreferences.setDarkModeEnabled(darkModeEnabled);
@@ -162,7 +161,6 @@ public class Settings extends JFrame {
 			toggleButton.setText(languageManager.getString("settings.darkmode.off"));
 		}
 		
-		// Apply theme to all open windows
 		themeManager.setDarkMode(darkModeEnabled);
 		JOptionPane.showMessageDialog(this, 
 			languageManager.getString("settings.theme.changed"),
@@ -170,9 +168,6 @@ public class Settings extends JFrame {
 			JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	/**
-	 * Handle account deletion with confirmation and database deletion
-	 */
 	private void deleteAccount() {
 		int response = JOptionPane.showConfirmDialog(this,
 			languageManager.getString("settings.delete.confirm"),
@@ -185,9 +180,6 @@ public class Settings extends JFrame {
 		}
 	}
 	
-	/**
-	 * Execute account deletion logic in database
-	 */
 	private void performAccountDeletion() {
 		try {
 			boolean success = userService.delete(userId);
@@ -199,6 +191,8 @@ public class Settings extends JFrame {
 					JOptionPane.INFORMATION_MESSAGE);
 				
 				userPreferences.clearUserData();
+				// Close parent Home window if it exists
+				if (parentHome != null) parentHome.dispose();
 				openRegister();
 			} else {
 				JOptionPane.showMessageDialog(this,
@@ -212,12 +206,10 @@ public class Settings extends JFrame {
 				languageManager.getString("error.title"),
 				JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
+			dispose();
 		}
 	}
-	
-	/**
-	 * Handle user logout
-	 */
+
 	private void logout() {
 		int response = JOptionPane.showConfirmDialog(this,
 			languageManager.getString("settings.logout.confirm"),
@@ -227,13 +219,13 @@ public class Settings extends JFrame {
 		
 		if (response == JOptionPane.YES_OPTION) {
 			userPreferences.clearUserSession();
+			// Close parent Home window if it exists
+			if (parentHome != null) parentHome.dispose();
 			openLogin();
+			dispose();
 		}
 	}
 	
-	/**
-	 * Change application language
-	 */
 	private void changeLanguage(String language) {
 		try {
 			userPreferences.setLanguage(language);
@@ -244,7 +236,6 @@ public class Settings extends JFrame {
 				languageManager.getString("settings.language.title"),
 				JOptionPane.INFORMATION_MESSAGE);
 			
-			// Refresh UI with new language
 			refreshUI();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this,
@@ -255,15 +246,12 @@ public class Settings extends JFrame {
 		}
 	}
 	
-	/**
-	 * Refresh UI with new language strings
-	 */
 	private void refreshUI() {
 		this.dispose();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Settings newFrame = new Settings(userId);
+					Settings newFrame = new Settings(userId, parentHome);
 					newFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -272,9 +260,6 @@ public class Settings extends JFrame {
 		});
 	}
 	
-	/**
-	 * Display About Us dialog
-	 */
 	private void showAboutUs() {
 		String aboutMessage = languageManager.getString("about.app.name") + "\n\n" +
 							  languageManager.getString("about.version") + ": 1.0.0\n\n" +
@@ -287,9 +272,6 @@ public class Settings extends JFrame {
 			JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	/**
-	 * Open the Register GUI
-	 */
 	private void openRegister() {
 		this.dispose();
 		EventQueue.invokeLater(new Runnable() {
@@ -304,9 +286,6 @@ public class Settings extends JFrame {
 		});
 	}
 	
-	/**
-	 * Open the Login GUI
-	 */
 	private void openLogin() {
 		this.dispose();
 		EventQueue.invokeLater(new Runnable() {
@@ -320,4 +299,6 @@ public class Settings extends JFrame {
 			}
 		});
 	}
+	
 }
+

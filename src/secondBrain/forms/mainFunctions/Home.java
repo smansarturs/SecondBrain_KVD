@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import secondBrain.forms.Login;
+import secondBrain.forms.Register;
 import secondBrain.services.ProjectService;
 
 public class Home extends JFrame {
@@ -245,7 +247,7 @@ public class Home extends JFrame {
 			public void run () {
 				try {
 					System.out.println("Debug: Opening settings with userId = " + userId);
-					Settings settingsFrame = new Settings(userId);
+					Settings settingsFrame = new Settings(userId, Home.this);
 					settingsFrame.setVisible(true);
 				} catch (Exception e) {
 					System.err.println("Error opening settings: " + e.getMessage());
@@ -254,6 +256,7 @@ public class Home extends JFrame {
 			}
 		});
 	}
+	
 
 	public int getUserId() {
 		return userId;
