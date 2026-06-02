@@ -257,7 +257,6 @@ public class Settings extends JFrame {
 	 * Refresh UI with new language strings
 	 */
 	private void refreshUI() {
-		// Dispose and recreate the frame with updated language
 		this.dispose();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
