@@ -116,7 +116,11 @@ public class Home extends JFrame {
 		JButton btnNewButton_6 = new JButton("Settings");
 		btnNewButton_6.setBounds(27, 408, 311, 34);
 		contentPane.add(btnNewButton_6);
-
+		btnNewButton_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openSettings();
+			}
+		});
 	}
 
 
@@ -223,7 +227,7 @@ public class Home extends JFrame {
 					int projectId = projectService.getOrCreateDefaultProject(userId);
 					
 					if (projectId > 0) {
-						AddNodeModal addNodeModalFrame = new AddNodeModal(userId, projectId);
+						AddNodeModal addNodeModalFrame = new AddNodeModal(null, userId, projectId);
 						addNodeModalFrame.setVisible(true);
 					} else {
 						System.err.println("Error: Could not get project for user");
@@ -231,6 +235,17 @@ public class Home extends JFrame {
 				} catch (Exception e) {
 					System.err.println("Error opening add node modal function: " + e.getMessage());
 					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	private void openSettings() {
+		EventQueue.invokeLater(new Runnable () {
+			public void run () {
+				try {
+					System.out.println("Debug: Opening settings with userId = " + userId);
+					
 				}
 			}
 		});
