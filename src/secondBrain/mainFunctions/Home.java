@@ -92,7 +92,7 @@ public class Home extends JFrame {
 		JButton btnNewButton_4 = new JButton("Canvas view");
 		btnNewButton_4.setBounds(27, 318, 311, 34);
 		contentPane.add(btnNewButton_4);
-		btnNewButton_3.addActionListener(new ActionListener () {
+		btnNewButton_4.addActionListener(new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 				openCanvasView();
 			}

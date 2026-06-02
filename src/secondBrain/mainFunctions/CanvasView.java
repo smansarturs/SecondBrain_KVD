@@ -18,6 +18,8 @@ public class CanvasView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private CanvasPanel canvasPanel;
+	private int userId;
+	private int projectId;
 
 	/**
 	 * Launch the application.
@@ -38,31 +40,31 @@ public class CanvasView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CanvasView() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
-		setTitle("SecondBrain - Canvas View");
-		
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JLabel lblTitle = new JLabel("Canvas view");
-		lblTitle.setForeground(SystemColor.textHighlight);
-		lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		lblTitle.setBounds(10, 10, 105, 22);
-		contentPane.add(lblTitle);
-		
-		// Create and add canvas panel
-		canvasPanel = new CanvasPanel();
-		canvasPanel.setBounds(10, 40, 770, 530);
-		contentPane.add(canvasPanel);
+	public CanvasView(int userId, int projectId) {
+	    this.userId = userId;
+	    this.projectId = projectId;
+	    
+	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    setBounds(100, 100, 800, 600);
+	    setTitle("SecondBrain - Canvas View");
+	    
+	    contentPane = new JPanel();
+	    contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+	    setContentPane(contentPane);
+	    contentPane.setLayout(null);
+	    
+	    JLabel lblTitle = new JLabel("Canvas view");
+	    lblTitle.setForeground(SystemColor.textHighlight);
+	    lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 16));
+	    lblTitle.setBounds(10, 10, 105, 22);
+	    contentPane.add(lblTitle);
+	    
+	    canvasPanel = new CanvasPanel();
+	    canvasPanel.setBounds(10, 40, 770, 530);
+	    contentPane.add(canvasPanel);
 	}
 
-	/**
-	 * Inner class for the actual canvas drawing area
-	 */
+	
 	private static class CanvasPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
